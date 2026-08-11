@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Insert Fit Finder",
+  "schemaVersion": 1,
+  "description": "On-site fireplace insert fit finder for Pristine Sweeps. Enter the fireplace opening measured at the facing; returns inserts that fit, ranked by firebox size, with surround options and sizes on every card. Flags candidates needing brick removal or a custom surround rather than excluding them. Optional rear-width check. Data confirmed from manufacturer manuals and spec sheets."
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Insert fit finder — Pristine Sweeps</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#faf9f5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Fit Finder">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-512.png">
+<style>
+:root{color-scheme:light;--ink:#1a1a19;--ink2:#5f5e5a;--ink3:#898781;--line:#e1e0d9;--bg:#faf9f5;--card:#fff;--ok:#1D9E75;--ok-bg:#E1F5EE;--ok-ink:#0F6E56;--warn-bg:#FAEEDA;--warn-ink:#854F0B;--warn-line:#D9A441;--soft:#f2f1ec;}
+*{box-sizing:border-box;-webkit-text-size-adjust:100%;}
+body{margin:0;padding:20px 16px 60px;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-size:16px;line-height:1.55;}
+.wrap{max-width:680px;margin:0 auto;}
+h1{font-size:21px;font-weight:600;margin:0 0 3px;}
+.sub{color:var(--ink2);font-size:14px;margin:0 0 20px;}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;}
+.plab{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);margin:0 0 9px;}
+.inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+label.f{display:block;font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.03em;margin-bottom:5px;}
+input[type=number]{width:100%;font:inherit;font-size:22px;font-weight:600;padding:11px 10px;border:1.5px solid #d5d4cc;border-radius:9px;background:#fff;color:var(--ink);text-align:center;}
+input[type=number]:focus{outline:none;border-color:var(--ok);}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;}
+.hint{font-size:12px;color:var(--ink3);margin-top:10px;}
+.opts{margin-top:12px;display:flex;align-items:flex-start;gap:8px;font-size:14px;color:var(--ink2);}
+.opts input{margin-top:3px;flex-shrink:0;}
+.half{max-width:220px;}
+.banner{background:var(--warn-bg);color:var(--warn-ink);border-radius:10px;padding:10px 13px;font-size:13.5px;margin-bottom:14px;}
+.count{font-size:13px;color:var(--ink2);margin:0 0 10px;font-weight:500;}
+.grp{margin-bottom:20px;}
+.ghead{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);margin:0 0 4px;display:flex;align-items:center;gap:8px;}
+.gsub{font-size:12.5px;color:var(--ink3);margin:0 0 9px;padding-left:17px;}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:9px;overflow:hidden;}
+.card.fit{border-left:4px solid var(--ok);}
+.card.rev{border-left:4px solid var(--warn-line);}
+.card.unk{border-left:4px solid #b9b7ae;}
+.hd{padding:13px 14px;cursor:pointer;}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+.name{font-weight:600;font-size:16px;}
+.brand{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
+.dim{font-size:13px;color:var(--ink2);margin-top:6px;font-variant-numeric:tabular-nums;}
+.dim b{font-weight:600;color:var(--ink);}
+.slist{margin-top:7px;font-size:12.5px;color:var(--ink2);line-height:1.5;}
+.slist .lbl{color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;font-size:11px;font-weight:600;display:block;margin-bottom:2px;}
+.slist span.s{display:inline-block;background:var(--soft);border-radius:7px;padding:2px 7px;margin:0 4px 4px 0;font-variant-numeric:tabular-nums;}
+.cut{display:inline-block;font-size:10px;padding:1px 5px;border-radius:7px;background:var(--ok-bg);color:var(--ok-ink);margin-left:4px;font-weight:600;letter-spacing:.02em;}
+.stats{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+.chip{font-size:11.5px;padding:2.5px 8px;border-radius:9px;background:var(--soft);color:var(--ink2);white-space:nowrap;}
+.chip.credit{background:var(--ok-bg);color:var(--ok-ink);font-weight:600;}
+.chip.flag{background:var(--warn-bg);color:var(--warn-ink);}
+.why{font-size:13px;color:var(--warn-ink);margin-top:8px;background:var(--warn-bg);padding:7px 9px;border-radius:7px;}
+.why b{font-weight:600;}
+.more{font-size:12px;color:var(--ink3);margin-top:8px;}
+.card.open .more{color:var(--ok-ink);}
+.body{display:none;border-top:1px solid var(--line);padding:14px;background:#fcfcfa;}
+.card.open .body{display:block;}
+h4{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);margin:14px 0 6px;}
+h4:first-child{margin-top:0;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+td{padding:5px 0;border-bottom:1px solid #eceae3;vertical-align:top;}
+td:first-child{color:var(--ink2);padding-right:12px;}
+td:last-child{text-align:right;font-variant-numeric:tabular-nums;}
+.sur{font-size:13.5px;padding:7px 0;border-bottom:1px solid #eceae3;display:flex;justify-content:space-between;gap:10px;}
+.sur:last-child{border-bottom:none;}
+.sur .sd{color:var(--ink3);font-size:12.5px;display:block;font-weight:400;}
+.sur .pr{white-space:nowrap;font-variant-numeric:tabular-nums;}
+.links{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
+.links a{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;border:1px solid #d5d4cc;padding:7px 12px;border-radius:8px;}
+.pend{font-size:12.5px;color:var(--warn-ink);background:var(--warn-bg);padding:7px 9px;border-radius:7px;margin-top:6px;}
+.empty{background:var(--card);border:1px dashed #c9c8c0;border-radius:12px;padding:22px 16px;text-align:center;color:var(--ink2);font-size:14px;}
+.ruled{font-size:12.5px;color:var(--ink3);margin:0 0 18px;padding:9px 12px;background:var(--soft);border-radius:9px;}
+footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink3);}
+footer p{margin:0 0 7px;}
+footer strong{color:var(--ink2);}
+@media(max-width:420px){.inputs{gap:7px}input[type=number]{font-size:19px;padding:10px 4px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Insert fit finder</h1>
+<p class="sub">Measure the fireplace opening at the facing material.</p>
+
+<div class="panel">
+  <p class="plab">Opening at facing</p>
+  <div class="inputs">
+    <div><label class="f" for="h">Height</label><input type="number" id="h" inputmode="decimal" step="0.125" placeholder="—"></div>
+    <div><label class="f" for="w">Width</label><input type="number" id="w" inputmode="decimal" step="0.125" placeholder="—"></div>
+    <div><label class="f" for="d">Depth</label><input type="number" id="d" inputmode="decimal" step="0.125" placeholder="—"></div>
+  </div>
+  <p class="hint">Measure the smallest point of each.</p>
+  <div class="opts">
+    <input type="checkbox" id="off">
+    <label for="off" style="font-size:14px;color:var(--ink2);">Offset flue adaptor needed (damper or smoke shelf in the way) — requires more depth</label>
+  </div>
+</div>
+
+<div class="panel">
+  <p class="plab">Rear firebox width — optional</p>
+  <div class="half"><input type="number" id="rw" inputmode="decimal" step="0.125" placeholder="—"></div>
+  <p class="hint">Leave blank to search without it. Tapered fireboxes narrow toward the back; the insert body still has to pass. You'll be prompted to confirm this before committing to a model.</p>
+</div>
+
+<div id="out"></div>
+
+<footer>
+  <p><strong>Width allowance.</strong> A model short on width by up to 4" is flagged rather than excluded, on the basis of removing one 2" firebrick course from each side wall. <strong>Height and depth have no allowance</strong> — those are hard fails.</p>
+  <p><strong>Surround coverage.</strong> If the opening is bigger than the largest available surround, the model is flagged, not excluded — raising the firebox floor, refacing, or a custom surround can still make it work.</p>
+  <p><strong>Manufacturers warn against removing brick or mortar from a masonry fireplace.</strong> Regency and MF Fire both state it explicitly. These flags mark a job for your inspection and judgement, not a green light.</p>
+  <p><strong>BTU is the EPA-tested figure where published</strong>, advertised struck through. <strong>Tax credit</strong> = US Biomass Rebate, needs HHV ≥ 75%.</p>
+  <p><strong>Rear widths are unverified.</strong> They were read off unlabelled dimension drawings and have not been confirmed against a unit. Treat them as a prompt to check, never as a pass. Regency publishes no plan view at all, so no rear width exists for those models.</p>
+  <p>Surround pricing is complete for the i3000 only until the 2026 Regency price sheet is read. Source of truth: <code>/Pristine Sweeps/Inserts/insert-specs.csv</code>. Compiled 11 August 2026.</p>
+</footer>
+</div>
+
+<script>
+const OSB="https://sbiweb.blob.core.windows.net/media/7815/pub043a_osburn_en-usa_2025-10_web.pdf";
+const REG="https://assets.regency-fire.com/getdoc/aa3deac3-ac49-44e0-935e-31d276c5a721/Regency-Wood-Inserts-FP-Brochure";
+const MFF="https://mffire.com/app/uploads/2021/03/MF-Fire-Brochure-3-15-21.pdf";
+const RAI="https://us.rais.com/client_media/files/Catalogs/Rais%20Catalog.pdf";
+const BRICK=4;   // width allowance, 2" per side wall
+const M=[
+{b:"Osburn",n:"1700-I",h:21.5,w:27.5,d:12.875,fb:1.86,btu:65000,hhv:68,em:2.4,burn:7,cr:false,bodyH:21.25,bodyW:27.125,bodyD:22.375,rearW:27.125,taper:"straight",
+ page:"https://www.osburn-mfg.com/en/products/wood-inserts/1700-wood-insert/",br:OSB,
+ man:"https://sbiweb.blob.core.windows.net/media/6998/45981_ia_2023-09-06.pdf",
+ spec:"https://sbiweb.blob.core.windows.net/media/5169/ob01705-osburn-1700-i.pdf",
+ sur:[{n:"Faceplate",d:"Sizes not published as text — see spec sheet"}]},
+
+{b:"Osburn",n:"MATRIX 1900",h:19,w:25,d:15.5,fb:1.1,btu:45000,hhv:75,em:1.5,burn:7,cr:true,bodyH:23.875,bodyD:21,faceW:36,taper:"tapered",
+ flag:"Opening width: page says 25\", manual reads 26\". Confirm before quoting.",
+ page:"https://www.osburn-mfg.com/en/products/wood-inserts/matrix-1900-wood-insert/",br:OSB,
+ man:"https://sbiweb.blob.core.windows.net/media/7872/46278_ia_2026-06-26.pdf",
+ spec:"https://sbiweb.blob.core.windows.net/media/6661/ob01900_matrix-1900.pdf",
+ sur:[{n:"Cuttable faceplate",sw:44,sh:32,cut:true}]},
+
+{b:"Osburn",n:"2000-I",h:23.375,w:28.875,d:15.75,fb:2.4,btu:75000,hhv:72,em:2.3,burn:8,cr:false,bodyH:23.125,bodyW:28.375,bodyD:26.375,rearW:28.375,taper:"straight",
+ page:"https://www.osburn-mfg.com/en/products/wood-inserts/2000-wood-insert/",br:OSB,
+ man:"https://sbiweb.blob.core.windows.net/media/7111/45927a_2024-02-28.pdf",
+ spec:"https://sbiweb.blob.core.windows.net/media/4695/ob02016_osburn-2000-i.pdf",
+ sur:[{n:"Faceplate",d:"Sizes not published as text — see spec sheet"}]},
+
+{b:"Osburn",n:"INSPIRE 2000-I",h:24.625,w:29,d:20.75,fb:2.4,btu:75000,hhv:72,em:2.3,burn:8,cr:false,wt:435,bodyH:24.375,bodyW:28.5,bodyD:20.875,rearW:28.5,taper:"straight",
+ page:"https://www.osburn-mfg.com/en/products/wood-inserts/inspire-wood-insert/",br:OSB,
+ man:"https://sbiweb.blob.core.windows.net/media/7873/45952a_2025-12-02.pdf",
+ spec:"https://sbiweb.blob.core.windows.net/media/4659/ob02045_osburn-inspire-2000-i-nord-am%C3%A9ricain.pdf",
+ sur:[{n:"Faceplate",d:"Dedicated install guide — sizes not published as text"}]},
+
+{b:"Osburn",n:"MATRIX-I",h:23.375,w:28.875,d:19.625,fb:2.4,btu:75000,hhv:72,em:2.3,burn:8,cr:false,wt:491,bodyH:25.125,bodyW:28.375,bodyD:23.125,faceW:36.125,rearW:28.375,taper:"straight",
+ flag:"Opening depth varies with projection kit.",
+ page:"https://www.osburn-mfg.com/en/products/wood-inserts/matrix-wood-insert/",br:OSB,
+ man:"https://sbiweb.blob.core.windows.net/media/7906/45929a_2026-04-09.pdf",
+ spec:"https://sbiweb.blob.core.windows.net/media/4680/ob02028_osburn-matrix-i.pdf",
+ sur:[{n:"Backing plate — regular",sw:44,sh:29},{n:"Backing plate — oversize",sw:50,sh:29},{n:'Projection kit 2" or 4"',d:"Brings unit forward — changes required depth"}]},
+
+{b:"Osburn",n:"3500-I",h:26.25,w:31,d:18.375,fb:3.5,btu:110000,hhv:71,em:1.6,burn:10,cr:false,wt:540,bodyH:24.875,bodyW:30.375,bodyD:29,rearW:30.375,taper:"straight",
+ page:"https://www.osburn-mfg.com/en/products/wood-inserts/3500-wood-insert/",br:OSB,
+ man:"https://sbiweb.blob.core.windows.net/media/7017/46180a_2023-08-25.pdf",
+ spec:"https://sbiweb.blob.core.windows.net/media/5672/ob03510-osburn-35-i.pdf",
+ sur:[{n:"Faceplate",d:"Sizes not published as text — see spec sheet"}]},
+
+{b:"Osburn",n:"MATRIX 2700",h:27.125,w:31.75,d:22.125,fb:2.5,btu:80000,hhv:64,em:1.2,burn:8,cr:false,bodyH:30.125,bodyW:30.75,bodyD:27.25,faceW:43.625,taper:"tapered",
+ page:"https://www.osburn-mfg.com/en/products/wood-inserts/matrix-2700-wood-insert/",br:OSB,
+ man:"https://sbiweb.blob.core.windows.net/media/7876/45999a_2025-12-04.pdf",
+ spec:"https://sbiweb.blob.core.windows.net/media/5186/ob02700-osburn-matrix-2700-encastrable.pdf",
+ sur:[{n:"Cuttable faceplate",d:"Size not published as text — see spec sheet",cut:true},{n:"Projection kit",d:"Changes required depth"}]},
+
+{b:"Regency",n:"Classic I1150",h:19,w:23,d:13.75,dOff:16.5,fb:0.98,btu:55000,hhv:70,lhv:75,em:1.7,burn:8,cr:false,bodyW:22.75,bodyD:19.75,bodyH:20.1875,
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/I1150",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/e1d6d18d-6525-4f4c-9196-6267c1f8f6c3/i1150-1-English-Manual.aspx",
+ spec:"https://assets.regency-fire.com/getdoc/e5cfd4ff-50ff-46ac-bf36-4250c894a79a/Spec-sheet-I1150",
+ sur:[{n:"Standard",sw:38,sh:26.375},{n:"Oversize",sw:44,sh:30.375}]},
+
+{b:"Regency",n:"Cascades I1500",h:19,w:23,d:13.75,dOff:16.5,fb:0.98,btu:55000,hhv:78,lhv:84,em:1.0,burn:10,cr:true,
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/I1500",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/13591ea6-09cc-448b-9dad-3a8cb475e00f/I1500-English-Manual.aspx",
+ spec:"https://assets.regency-fire.com/getdoc/8b1aad23-16e3-4125-b5a8-2f4d743b86e4/I1500-specsheet",
+ sur:[{n:"Standard",sw:38,sh:26.375},{n:"Oversize",sw:44,sh:30.375}]},
+
+{b:"Regency",n:"Hampton HI1150",h:19.625,w:25,d:15,dOff:18.0625,fb:0.98,btu:55000,hhv:70,lhv:75,em:1.7,burn:8,cr:false,
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/HI1150",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/810252b7-e315-4858-a012-59116daea87c/Hi1150-1-English-Manual.aspx",
+ spec:"https://assets.regency-fire.com/getdoc/9928f383-02a8-47d7-9614-1ebad79ebf6b/Spec-sheet-Hi1150",
+ sur:[{n:"Cast faceplate",sw:38.3125,sh:27.25,d:"Metallic black or timberline brown"}]},
+
+{b:"Regency",n:"Classic I2450",h:21.5,w:25,d:17,fb:2.3,btu:75000,hhv:70.3,lhv:76,em:1.6,burn:10,cr:false,
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/I2450",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/b31aadbf-c435-4782-97e9-8027f269b0d6/i2450-2-English-Manual.aspx",
+ spec:"https://assets.regency-fire.com/getdoc/5393a2be-33a0-4c80-b107-d438510c50c5/Spec-sheet-I2450",
+ sur:[{n:"Regular",sw:40,sh:30},{n:"Oversize",sw:48,sh:33}]},
+
+{b:"Regency",n:"Hampton HI2450",h:21.5,w:25,d:17,fb:2.3,btu:75000,hhv:70.3,lhv:76,em:1.6,burn:10,cr:false,
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/HI2450",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/8ec674d1-c38c-4271-a95a-7dd19534b515/Hi2450-2-English-Manual.aspx",
+ spec:"https://assets.regency-fire.com/getdoc/5dc10b61-bed9-4c88-9b44-50c5f9f4d957/Spec-sheet-Hi2450",
+ sur:[{n:"Standard cast",sw:40,sh:30},{n:"Standard cast wide",sw:42.5,sh:30},{n:"Oversize cast",sw:48,sh:34.5625},{n:"Oversize cast wide",sw:51.875,sh:34.5625}]},
+
+{b:"Regency",n:"Cascades I2500",h:21.5,w:25,d:17,fb:2.3,btu:83000,hhv:78.3,lhv:84.7,em:1.4,burn:12,cr:true,
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/I2500",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/b1d5036d-1c68-4ac0-b5f6-f0775fd2a48e/I2500M-1-English-Manual.aspx",
+ spec:"https://assets.regency-fire.com/getdoc/4f8f723b-5211-4b90-8cc4-7ef94e3b4465/Spec-Sheet-I2500-1",
+ sur:[{n:"Standard",sw:40,sh:30},{n:"Oversize",sw:48,sh:33}]},
+
+{b:"Regency",n:"Pro-Series CI2700",h:21.75,w:29,d:19,fb:2.6,btu:27000,btuAdv:78000,hhv:77,lhv:83,em:1.1,burn:14,cr:true,bodyW:28.875,bodyD:21.5,
+ flag:"Body is 28⅞\" against a 29\" minimum opening — ⅛\" clearance. Measure twice.",
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/CI2700",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/8d2c6fc7-5cf6-4416-bff3-466afb95ad27/CI2700-1-HI500-1.aspx",
+ spec:"https://assets.regency-fire.com/getdoc/8e7b2a25-5aea-4b71-96c1-b4d97e52ef55/Spec-Sheet-CI2700-1_HI500-1",
+ sur:[{n:"Low-profile faceplate",sw:40,sh:26},{n:"Contemporary faceplate",sw:40,sh:26},{n:"Standard backing plate",sw:44,sh:29.875},{n:"Oversized backing plate",sw:48,sh:30.25}]},
+
+{b:"Regency",n:"Hampton HI500",h:21.75,w:29,d:19,fb:2.6,btu:27000,btuAdv:78000,hhv:77,lhv:83,em:1.1,burn:14,cr:true,bodyW:28.875,bodyD:21.5,
+ flag:"Body is 28⅞\" against a 29\" minimum opening — ⅛\" clearance. Measure twice.",
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/HI500",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/ae5d549d-e72f-47e0-bd87-47d72597d54a/CI2700-1-HI500-1.aspx",
+ spec:"https://assets.regency-fire.com/getdoc/8e7b2a25-5aea-4b71-96c1-b4d97e52ef55/Spec-Sheet-CI2700-1_HI500-1",
+ sur:[{n:"Standard cast",sw:39.5,sh:26.5},{n:"Oversize cast",sw:44,sh:31},{n:"Standard backing plate",sw:44,sh:29.875},{n:"Oversized backing plate",sw:48,sh:30.25}]},
+
+{b:"MF Fire",n:"Nova",h:25,w:30,d:16,fb:1.7,btu:50000,em:null,burn:null,cr:null,
+ page:"https://mffire.com/product/nova-wood-burning-stove-insert/",br:MFF,
+ sur:[{n:"Trim kit",sw:40,sh:29,d:"Only size offered"}]},
+
+{b:"MF Fire",n:"Nova 2",h:28,w:33,d:16,fb:2.4,btu:35000,btuAdv:75000,hhv:75.2,lhv:81,em:1.93,burn:null,cr:true,
+ flag:"Not approved for mobile homes. Requires full reline, 6\" liner, chimney 15–33 ft.",
+ page:"https://mffire.com/product/nova-wood-burning-stove-insert/",br:MFF,
+ man:"https://mffire.com/app/uploads/2022/06/Nova-2-Insert-Owners-Manual-060122.pdf",
+ sur:[{n:"Insert trim kit",sw:44,sh:32,d:"Only size offered"}]},
+
+{b:"Rais",n:"Q-Tee II",h:26,w:25,d:15.5,fb:null,btu:20000,em:0.7,burn:null,cr:null,bodyH:25.1,bodyW:24.4,bodyD:14.9,
+ flag:"Heating capacity rated at −20 °C. Smallest output of the range.",
+ page:"https://us.rais.com/q-tee-ii-insert.html",br:RAI,
+ man:"https://us.rais.com/client_media/files/Manuals/New2023Q-Tee%20II%20INSERT%20USA_8296510.pdf",
+ sur:[{n:"Surround options not published",d:"Ask Rais dealer"}]}
+];
+
+const NODIM=[
+{b:"Regency",n:"Alterra Pro i3000",cr:true,btu:85000,hhv:78,em:0.95,price:5049,
+ note:"Opening dimensions not published. Premium surrounds reduce required depth to 19½\", traditional to 19\" — so the base requirement is deeper than that.",
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/i3000",br:REG,
+ sur:[
+  {n:"Contemporary regular",sw:45.75,sh:31,d:"166-910",p:540},
+  {n:"Contemporary oversize",sw:50.25,sh:33.25,d:"166-911",p:651},
+  {n:"Classic regular",sw:46.125,sh:31,d:"166-912",p:540},
+  {n:"Classic oversize",sw:50.25,sh:33.25,d:"166-913",p:646},
+  {n:"Arched regular",sw:46.125,sh:31,d:"166-914 · 28–31\" H",p:540},
+  {n:"3-sided custom",d:"Made to the opening · 166-937",p:970,cut:true},
+  {n:"Premium surround — black",sw:44.75,sh:30.25,d:'Reduces depth to 19½" · 391-920',p:283},
+  {n:"Premium surround — grey / white / bronze",d:"391-921 / 922 / 923",p:394},
+  {n:"Premium surround — brushed nickel",d:"391-924",p:843},
+  {n:"Traditional surround — black",sw:51.75,sh:33.875,d:'Reduces depth to 19" · 391-927',p:253},
+  {n:"Traditional surround — antique copper",d:"391-928",p:803},
+  {n:"Variable speed blower",d:"166-917",p:404},
+  {n:"Hardwire kit",d:"946-855",p:116}]},
+
+{b:"Regency",n:"Alterra CI1150",cr:false,btu:27353,btuAdv:55000,hhv:71,em:1.3,
+ note:"The US site links the Canadian spec sheet, which states this model cannot be sold in the USA. No US dimensions found — ask your Regency rep before quoting.",
+ page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/CI1150",br:REG,
+ man:"https://assets.regency-fire.com/getattachment/542922d8-4305-4c90-96e8-d9461b89c712/Ci1150-1-English-Manual.aspx",
+ sur:[{n:"Standard backing plate",sw:40,sh:37},{n:"Custom backing plate",d:"Cut to minimum dimensions",cut:true}]}
+];
+
+const FR={0.0625:"¹⁄₁₆",0.125:"⅛",0.1875:"³⁄₁₆",0.25:"¼",0.3125:"⁵⁄₁₆",0.375:"⅜",0.4375:"⁷⁄₁₆",0.5:"½",0.5625:"⁹⁄₁₆",0.625:"⅝",0.6875:"¹¹⁄₁₆",0.75:"¾",0.8125:"¹³⁄₁₆",0.875:"⅞",0.9375:"¹⁵⁄₁₆"};
+const f=n=>{const w=Math.floor(n),fr=n-w;
+  const k=Object.keys(FR).find(k=>Math.abs(fr-parseFloat(k))<0.001);
+  return k?(w?w:"")+FR[k]:String(+n.toFixed(2));};
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const maxSur=m=>{const s=m.sur.filter(x=>x.sw&&x.sh);if(!s.length)return null;
+  return{w:Math.max(...s.map(x=>x.sw)),h:Math.max(...s.map(x=>x.sh))};};
+
+function run(){
+  const H=parseFloat(h.value),W=parseFloat(w.value),D=parseFloat(d.value),RW=parseFloat(rw.value);
+  if(!(H>0)||!(W>0)||!(D>0)){out.innerHTML='<div class="empty">Enter height, width and depth to see what fits.</div>';return;}
+  const fits=[],rev=[],outH=[],outD=[];
+  M.forEach((m,i)=>{
+    const rd=(off.checked&&m.dOff)?m.dOff:m.d;
+    const gh=H-m.h,gw=W-m.w,gd=D-rd;
+    if(gh<0){outH.push(m.n+" (needs "+f(m.h)+'")');return;}
+    if(gd<0){outD.push(m.n+" (needs "+f(rd)+'")');return;}
+    const notes=[];
+    if(gw<0){
+      if(-gw>BRICK)return;
+      notes.push({t:"brick",s:'Width short by '+f(-gw)+'". Within the '+BRICK+'" allowance — needs inspection and possible brick removal.'});
+    }
+    const ms=maxSur(m);
+    if(ms){
+      const ow=W>ms.w,oh=H>ms.h;
+      if(ow||oh){
+        const p=[];if(ow)p.push('width by '+f(W-ms.w)+'"');if(oh)p.push('height by '+f(H-ms.h)+'"');
+        notes.push({t:"sur",s:"Opening exceeds the largest surround ("+f(ms.w)+'" × '+f(ms.h)+'") by '+p.join(" and ")+". Raise the floor, reface, or build custom."});
+      }
+    }else notes.push({t:"unk",s:"Surround sizes not published — confirm coverage against the spec sheet."});
+    if(RW>0){
+      if(m.rearW){
+        if(RW<m.rearW)notes.push({t:"rear",s:'Rear firebox '+f(RW)+'" may be narrower than the insert body at the rear (~'+f(m.rearW)+'", UNVERIFIED — read off the drawing, not yet confirmed). Check the spec sheet.'});
+      }else notes.push({t:"rear",s:"Rear body width not recorded"+(m.taper?" ("+m.taper+" body)":"")+" — check the spec sheet drawing before committing."});
+    }
+    const r={m,i,rd,notes,gw};
+    if(notes.some(n=>n.t==="brick"||n.t==="sur"||n.t==="rear"))rev.push(r);else fits.push(r);
+  });
+  fits.sort((a,b)=>(b.m.fb||0)-(a.m.fb||0));
+  rev.sort((a,b)=>(b.m.fb||0)-(a.m.fb||0));
+
+  let s="";
+  if(!(RW>0))s+='<div class="banner"><b>Rear firebox width not entered.</b> Confirm the back of the firebox clears the insert body before committing to a model.</div>';
+  s+='<p class="count">'+fits.length+" of "+M.length+" models fit "+f(H)+'" × '+f(W)+'" × '+f(D)+'" as measured'+(off.checked?", offset adaptor":"")+".</p>";
+  if(fits.length){s+='<div class="grp"><p class="ghead"><span class="dot" style="background:var(--ok)"></span>Fits — largest firebox first</p>';fits.forEach(r=>s+=card(r,"fit"));s+="</div>";}
+  else s+='<div class="empty">Nothing fits cleanly'+(rev.length?" — see the options needing work below.":".")+'</div>';
+  if(rev.length){s+='<div class="grp"><p class="ghead"><span class="dot" style="background:var(--warn-line)"></span>Possible with work</p><p class="gsub">Not ruled out. Each needs your inspection before you promise it.</p>';rev.forEach(r=>s+=card(r,"rev"));s+="</div>";}
+  if(outH.length||outD.length){
+    s+='<p class="ruled"><b>Ruled out — no allowance on height or depth.</b>';
+    if(outH.length)s+="<br>Too tall for the opening: "+esc(outH.join(", "))+".";
+    if(outD.length)s+="<br>Too deep for the opening: "+esc(outD.join(", "))+".";
+    s+="</p>";
+  }
+  s+='<div class="grp"><p class="ghead"><span class="dot" style="background:#b9b7ae"></span>Can\'t check — dimensions not published</p>';
+  NODIM.forEach((m,j)=>s+=card({m,i:"n"+j,rd:null,notes:[]},"unk"));s+="</div>";
+  out.innerHTML=s;
+}
+
+function surLine(m){
+  const sized=m.sur.filter(x=>x.sw&&x.sh);
+  let s='<div class="slist"><span class="lbl">Surrounds</span>';
+  if(sized.length)sized.forEach(x=>s+='<span class="s">'+esc(x.n)+" "+f(x.sw)+'" × '+f(x.sh)+'"'+(x.cut?'<span class="cut">cuttable</span>':"")+"</span>");
+  const unsized=m.sur.filter(x=>!(x.sw&&x.sh));
+  unsized.forEach(x=>s+='<span class="s">'+esc(x.n)+(x.cut?'<span class="cut">cuttable</span>':"")+"</span>");
+  return s+"</div>";
+}
+
+function card(r,cls){
+  const m=r.m,id=cls+"-"+r.i;
+  let s='<div class="card '+cls+'" id="'+id+'"><div class="hd" onclick="document.getElementById(\''+id+'\').classList.toggle(\'open\')">';
+  s+='<div class="top"><span class="name">'+esc(m.n)+'</span><span class="brand">'+esc(m.b)+'</span></div>';
+  if(r.rd)s+='<div class="dim"><b>Min. opening at facing</b> — '+f(m.h)+'" H × '+f(m.w)+'" W × '+f(r.rd)+'" D</div>';
+  if(m.bodyD){
+    const inclFace=m.bodyW&&m.bodyW>m.w;
+    s+='<div class="dim">Stove body — '+(m.bodyW?f(m.bodyW)+'" W × ':"")+f(m.bodyD)+'" D'+(m.bodyH?" × "+f(m.bodyH)+'" H':"")+
+       (m.taper?' <span class="cut" style="background:var(--soft);color:var(--ink2)">'+m.taper+"</span>":"")+
+       (m.rearW?' <span class="cut" style="background:var(--warn-bg);color:var(--warn-ink)">rear '+f(m.rearW)+'" unverified</span>':"")+
+       (inclFace?' <span class="cut" style="background:var(--warn-bg);color:var(--warn-ink)">incl. faceplate</span>':"")+"</div>";
+  }else s+='<div class="dim" style="color:var(--ink3)">Stove body dimensions not published as text</div>';
+  s+=surLine(m);
+  s+='<div class="stats">';
+  if(m.price)s+='<span class="chip">$'+m.price.toLocaleString()+" body &amp; door</span>";
+  if(m.fb)s+='<span class="chip">'+m.fb+" cu ft</span>";
+  if(m.btuAdv)s+='<span class="chip">'+m.btu.toLocaleString()+" BTU tested <s>"+m.btuAdv.toLocaleString()+"</s></span>";
+  else if(m.btu)s+='<span class="chip">'+m.btu.toLocaleString()+" BTU</span>";
+  if(m.hhv)s+='<span class="chip">'+m.hhv+"% HHV</span>";
+  if(m.em)s+='<span class="chip">'+m.em+" g/hr</span>";
+  if(m.burn)s+='<span class="chip">'+m.burn+" hr burn</span>";
+  if(m.cr===true)s+='<span class="chip credit">Tax credit</span>';
+  if(m.cr===null)s+='<span class="chip flag">Credit unconfirmed</span>';
+  s+="</div>";
+  (r.notes||[]).forEach(n=>s+='<div class="why">'+esc(n.s)+"</div>");
+  if(m.flag)s+='<div class="why">'+esc(m.flag)+"</div>";
+  if(m.note)s+='<div class="why">'+esc(m.note)+"</div>";
+  s+='<div class="more">Tap for full surround list, specs and documents ▾</div></div>';
+
+  s+='<div class="body"><h4>Surround / faceplate options</h4>';
+  m.sur.forEach(x=>{
+    const dim=(x.sw&&x.sh)?f(x.sw)+'" W × '+f(x.sh)+'" H':"";
+    const extra=[dim,x.d].filter(Boolean).join(" · ");
+    s+='<div class="sur"><span><b>'+esc(x.n)+(x.cut?'<span class="cut">cuttable</span>':"")+"</b>"+(extra?'<span class="sd">'+esc(extra)+"</span>":"")+"</span>";
+    s+='<span class="pr">'+(x.p?"$"+x.p.toLocaleString():"—")+"</span></div>";
+  });
+  if(!m.sur.some(x=>x.p))s+='<div class="pend">Pricing pending — read the 2026 Regency price sheet.</div>';
+  s+='<h4>Specification</h4><table>';
+  if(r.rd)s+="<tr><td>Min. opening at facing</td><td>"+f(m.h)+'" × '+f(m.w)+'" × '+f(r.rd)+'"</td></tr>';
+  if(m.dOff)s+="<tr><td>Depth — standard / offset adaptor</td><td>"+f(m.d)+'" / '+f(m.dOff)+'"</td></tr>';
+  s+="<tr><td>Insert body W × D</td><td>"+((m.bodyW&&m.bodyD)?f(m.bodyW)+'" × '+f(m.bodyD)+'"':"not recorded — see spec sheet")+"</td></tr>";
+  s+="<tr><td>Rear body width</td><td>"+(m.rearW?f(m.rearW)+'" — <b>unverified</b>, read from drawing':"not recorded")+"</td></tr>";
+  if(m.taper)s+="<tr><td>Body profile</td><td>"+m.taper+"</td></tr>";
+  if(m.faceW)s+="<tr><td>Faceplate width</td><td>"+f(m.faceW)+'"</td></tr>';
+  if(m.fb)s+="<tr><td>Firebox</td><td>"+m.fb+" cu ft</td></tr>";
+  if(m.btuAdv)s+="<tr><td>BTU — tested / advertised</td><td>"+m.btu.toLocaleString()+" / "+m.btuAdv.toLocaleString()+"</td></tr>";
+  else if(m.btu)s+="<tr><td>BTU maximum</td><td>"+m.btu.toLocaleString()+"</td></tr>";
+  if(m.hhv)s+="<tr><td>Efficiency HHV"+(m.lhv?" / LHV":"")+"</td><td>"+m.hhv+"%"+(m.lhv?" / "+m.lhv+"%":"")+"</td></tr>";
+  if(m.em)s+="<tr><td>Emissions</td><td>"+m.em+" g/hr</td></tr>";
+  if(m.burn)s+="<tr><td>Burn time</td><td>up to "+m.burn+" hrs</td></tr>";
+  if(m.wt)s+="<tr><td>Shipping weight</td><td>"+m.wt+" lb</td></tr>";
+  s+="<tr><td>Biomass tax credit</td><td>"+(m.cr===true?"Eligible":m.cr===false?"Not eligible":"Unconfirmed")+"</td></tr>";
+  s+='</table><div class="links">';
+  if(m.page)s+='<a href="'+m.page+'" target="_blank" rel="noopener">Product page ↗</a>';
+  if(m.br)s+='<a href="'+m.br+'" target="_blank" rel="noopener">Brochure ↗</a>';
+  if(m.man)s+='<a href="'+m.man+'" target="_blank" rel="noopener">Manual ↗</a>';
+  if(m.spec)s+='<a href="'+m.spec+'" target="_blank" rel="noopener">Spec sheet ↗</a>';
+  s+="</div></div></div>";
+  return s;
+}
+["h","w","d","rw"].forEach(i=>document.getElementById(i).addEventListener("input",run));
+off.addEventListener("change",run);
+run();
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
