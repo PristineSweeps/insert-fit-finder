@@ -305,13 +305,16 @@ function run(){
       }else notes.push({t:"rear",s:"Rear body width not recorded"+(m.taper?" ("+m.taper+" body)":"")+" — check the spec sheet drawing before committing."});
     }
     const r={m,i,rd,notes,gw};
-    if(notes.some(n=>n.t==="brick"||n.t==="sur"||n.t==="rear"))rev.push(r);else fits.push(r);
+    // Rear-width notes are advisory only. The data is unverified, so it must never
+    // demote a model that passes on height, width and depth.
+    if(notes.some(n=>n.t==="brick"||n.t==="sur"))rev.push(r);else fits.push(r);
   });
   fits.sort((a,b)=>(b.m.fb||0)-(a.m.fb||0));
   rev.sort((a,b)=>(b.m.fb||0)-(a.m.fb||0));
 
   let s="";
   if(!(RW>0))s+='<div class="banner"><b>Rear firebox width not entered.</b> Confirm the back of the firebox clears the insert body before committing to a model.</div>';
+  else s+='<div class="banner"><b>Rear width is advisory only.</b> Recorded rear dimensions are unverified and most models have none, so this never rules a model out — it only adds a note to check.</div>';
   s+='<p class="count">'+fits.length+" of "+M.length+" models fit "+f(H)+'" × '+f(W)+'" × '+f(D)+'" as measured'+(off.checked?", offset adaptor":"")+".</p>";
   if(fits.length){s+='<div class="grp"><p class="ghead"><span class="dot" style="background:var(--ok)"></span>Fits — largest firebox first</p>';fits.forEach(r=>s+=card(r,"fit"));s+="</div>";}
   else s+='<div class="empty">Nothing fits cleanly'+(rev.length?" — see the options needing work below.":".")+'</div>';
