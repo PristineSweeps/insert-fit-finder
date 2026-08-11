@@ -1,7 +1,7 @@
 // Pristine Sweeps Insert Fit Finder - offline cache.
 // Bump CACHE when index.html changes so phones pick up the new version.
-const CACHE = "fitfinder-v10";
-const ASSETS = ["./", "./index.html", "./manifest.json", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
+const CACHE = "fitfinder-v17";
+const ASSETS = ["./", "./index.html", "./models.csv", "./surrounds.csv", "./manifest.json", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

@@ -1,0 +1,50 @@
+model,surround,width,height,cuttable,price,detail
+1700-I,Faceplate,,,,,Sizes not published as text — see spec sheet
+MATRIX 1900,Cuttable faceplate,44,32,yes,,
+2000-I,Faceplate,,,,,Sizes not published as text — see spec sheet
+INSPIRE 2000-I,Faceplate,,,,,Dedicated install guide — sizes not published as text
+MATRIX-I,Backing plate — regular,44,29,,,
+MATRIX-I,Backing plate — oversize,50,29,,,
+MATRIX-I,"Projection kit 2"" or 4""",,,,,Brings unit forward — changes required depth
+3500-I,Faceplate,,,,,Sizes not published as text — see spec sheet
+MATRIX 2700,Cuttable faceplate,,,yes,,Size not published as text — see spec sheet
+MATRIX 2700,Projection kit,,,,,Changes required depth
+Classic I1150,Standard,38,26.375,,,
+Classic I1150,Oversize,44,30.375,,,
+Cascades I1500,Standard,38,26.375,,,
+Cascades I1500,Oversize,44,30.375,,,
+Hampton HI1150,Cast faceplate,38.3125,27.25,,,Metallic black or timberline brown
+Classic I2450,Regular,40,30,,,
+Classic I2450,Oversize,48,33,,,
+Hampton HI2450,Standard cast,40,30,,,
+Hampton HI2450,Standard cast wide,42.5,30,,,
+Hampton HI2450,Oversize cast,48,34.5625,,,
+Hampton HI2450,Oversize cast wide,51.875,34.5625,,,
+Cascades I2500,Standard,40,30,,,
+Cascades I2500,Oversize,48,33,,,
+Pro-Series CI2700,Low-profile faceplate,40,26,,,
+Pro-Series CI2700,Contemporary faceplate,40,26,,,
+Pro-Series CI2700,Standard backing plate,44,29.875,,,
+Pro-Series CI2700,Oversized backing plate,48,30.25,,,
+Hampton HI500,Standard cast,39.5,26.5,,,
+Hampton HI500,Oversize cast,44,31,,,
+Hampton HI500,Standard backing plate,44,29.875,,,
+Hampton HI500,Oversized backing plate,48,30.25,,,
+Nova,Trim kit,40,29,,,Only size offered
+Nova 2,Insert trim kit,44,32,,,Only size offered
+Q-Tee II,Surround options not published,,,,,Ask Rais dealer
+Alterra Pro i3000,Contemporary regular,45.75,31,,540,166-910
+Alterra Pro i3000,Contemporary oversize,50.25,33.25,,651,166-911
+Alterra Pro i3000,Classic regular,46.125,31,,540,166-912
+Alterra Pro i3000,Classic oversize,50.25,33.25,,646,166-913
+Alterra Pro i3000,Arched regular,46.125,31,,540,"166-914 · 28–31"" H"
+Alterra Pro i3000,3-sided custom,,,yes,970,Made to the opening · 166-937
+Alterra Pro i3000,Premium surround — black,44.75,30.25,,283,"Reduces depth to 19½"" · 391-920"
+Alterra Pro i3000,Premium surround — grey / white / bronze,,,,394,391-921 / 922 / 923
+Alterra Pro i3000,Premium surround — brushed nickel,,,,843,391-924
+Alterra Pro i3000,Traditional surround — black,51.75,33.875,,253,"Reduces depth to 19"" · 391-927"
+Alterra Pro i3000,Traditional surround — antique copper,,,,803,391-928
+Alterra Pro i3000,Variable speed blower,,,,404,166-917
+Alterra Pro i3000,Hardwire kit,,,,116,946-855
+Alterra CI1150,Standard backing plate,40,37,,,
+Alterra CI1150,Custom backing plate,,,yes,,Cut to minimum dimensions

@@ -103,35 +103,39 @@ footer strong{color:var(--ink2);}
     <div><label class="f" for="h">Height</label><input type="number" id="h" inputmode="decimal" step="0.125" placeholder="—"></div>
     <div><label class="f" for="w">Width</label><input type="number" id="w" inputmode="decimal" step="0.125" placeholder="—"></div>
   </div>
-  <p class="plab" style="margin-top:14px">Facing to back wall</p>
-  <div class="inputs two">
-    <div><label class="f" for="d">At bottom</label><input type="number" id="d" inputmode="decimal" step="0.125" placeholder="—"></div>
-    <div><label class="f" for="dl">At top</label><input type="number" id="dl" inputmode="decimal" step="0.125" placeholder="—"></div>
-  </div>
-  <p class="hint">Bottom is at the firebox floor, top is at the top of the opening. The gap between them is back-wall slope.</p>
-  <p class="plab" style="margin-top:14px">Lintel thickness</p>
-  <div class="half"><input type="number" id="lt" inputmode="decimal" step="0.125" placeholder="—"></div>
-  <p class="hint">Front to back through the lintel itself. One brick — about 4" — is typical. Deeper lintels can force the offset flue adaptor.</p>
-  <div class="opts">
-    <input type="checkbox" id="off">
-    <label for="off" style="font-size:14px;color:var(--ink2);">Offset flue adaptor needed (damper or smoke shelf in the way) — requires more depth</label>
-  </div>
+  <p class="plab" style="margin-top:14px">Firebox depth at bottom</p>
+  <div class="half"><input type="number" id="d" inputmode="decimal" step="0.125" placeholder="—"></div>
+  <p class="hint">Facing to back wall at the firebox floor.</p>
 </div>
 
 <div class="panel">
-  <p class="plab">Hearth in front of the facing</p>
-  <div class="half"><input type="number" id="he" inputmode="decimal" step="0.125" placeholder="—"></div>
-  <p class="hint">Non-combustible hearth measured out from the facing. Most models need 16"; a few need 18–20".</p>
-  <p class="plab" style="margin-top:14px">Rear firebox width — optional</p>
-  <div class="half"><input type="number" id="rw" inputmode="decimal" step="0.125" placeholder="—"></div>
-  <p class="hint">Tapered fireboxes narrow toward the back; the insert body still has to pass.</p>
+  <p class="plab">Optional — refines the result</p>
+  <div class="inputs two" style="margin-top:4px">
+    <div><label class="f" for="dl">Depth at top</label><input type="number" id="dl" inputmode="decimal" step="0.125" placeholder="—"></div>
+    <div><label class="f" for="lt">Lintel depth</label><input type="number" id="lt" inputmode="decimal" step="0.125" placeholder="—"></div>
+  </div>
+  <div class="inputs two" style="margin-top:10px">
+    <div><label class="f" for="hal">Height above lintel</label><input type="number" id="hal" inputmode="decimal" step="0.125" placeholder="—"></div>
+    <div><label class="f" for="he">Hearth</label><input type="number" id="he" inputmode="decimal" step="0.125" placeholder="—"></div>
+  </div>
+  <div class="inputs two" style="margin-top:10px">
+    <div><label class="f" for="rw">Rear width</label><input type="number" id="rw" inputmode="decimal" step="0.125" placeholder="—"></div>
+    <div></div>
+  </div>
+  <p class="hint"><b>Depth at top</b> — facing to back wall at the top of the opening. The gap against the bottom is back-wall slope.<br>
+  <b>Lintel depth</b> and <b>height above lintel</b> — together decide the offset flue adaptor. An offset is only considered when the lintel reaches over the flue collar <em>and</em> there is under 6" above it.<br>
+  <b>Hearth</b> — non-combustible hearth out from the facing.<br>
+  <b>Rear width</b> — fireboxes taper; the insert body still has to pass.</p>
 </div>
 
 <div id="out"></div>
 
 <footer>
-  <p><strong>The facing dimensions are hard cutoffs.</strong> Height, width and depth measured at the facing rule a model out with no allowance — nothing can be gained at the face.</p>
-  <p><strong>The 4" allowance applies at the rear only.</strong> Fireboxes taper inward, so the rear is the pinch point, and removing or reorienting sidewall brick can buy room there. A model short at the rear by up to 4" is flagged for inspection rather than excluded.</p>
+  <p><strong>Room to work.</strong> The per-side figure is the gap between your opening and the stove body. Manufacturers design in about ½" a side; more is easier, up to the point where the surround can no longer cover the opening, which is flagged separately.</p>
+  <p><strong>Feet are reported separately</strong> because they are small points rather than a continuous face — where they are the tight spot, a channel cut for the feet is often enough, which is a far smaller job than opening up a back wall.</p>
+  <p><strong>The manufacturer's published minimum comes first.</strong> Every fit decision here is tested against the figure in the manual or spec sheet. Body dimensions, the brick allowance, feet widths and squeeze heights are <em>wiggle room</em> — identified separately, shown as flags, never used to loosen the published minimum.</p>
+  <p><strong>Height and width at the facing are hard cutoffs.</strong> Nothing can be gained at the face, so a model short on either is ruled out.</p>
+  <p><strong>The 4" allowance applies to the rear width and to depth only.</strong> Fireboxes taper inward, so the rear is the pinch point, and removing or reorienting brick at the back or sides can buy room there. A model short on rear width or depth by up to 4" is flagged for inspection rather than excluded.</p>
   <p><strong>Surround coverage.</strong> If the opening is bigger than the largest available surround, the model is flagged, not excluded — raising the firebox floor, refacing, or a custom surround can still make it work.</p>
   <p><strong>Manufacturers warn against removing brick or mortar from a masonry fireplace.</strong> Regency and MF Fire both state it explicitly. These flags mark a job for your inspection and judgement, not a green light.</p>
   <p><strong>BTU is the EPA-tested figure where published</strong>, advertised struck through. <strong>Tax credit</strong> = US Biomass Rebate, needs HHV ≥ 75%.</p>
@@ -141,162 +145,63 @@ footer strong{color:var(--ink2);}
 </div>
 
 <script>
-const OSB="https://sbiweb.blob.core.windows.net/media/7815/pub043a_osburn_en-usa_2025-10_web.pdf";
-const REG="https://assets.regency-fire.com/getdoc/aa3deac3-ac49-44e0-935e-31d276c5a721/Regency-Wood-Inserts-FP-Brochure";
-const MFF="https://mffire.com/app/uploads/2021/03/MF-Fire-Brochure-3-15-21.pdf";
-const RAI="https://us.rais.com/client_media/files/Catalogs/Rais%20Catalog.pdf";
-// Brick allowance applies ONLY at the REAR. Fireboxes taper inward, so the rear is the
-// pinch point and removing/reorienting sidewall brick buys room there. The facing
-// dimension is a hard cutoff — nothing can be gained at the face.
 const BRICK=4;
-const LINTEL_STD=4;   // one brick course. Threshold for "thick lintel" — NOT YET CONFIRMED.
-const M=[
-{b:"Osburn",n:"1700-I",h:21.5,w:27.5,d:12.875,fb:1.86,btu:65000,hhv:68,em:2.4,burn:7,cr:false,bodyH:21.25,bodyW:27.125,bodyD:22.375,rearW:27.125,taper:"straight",
- page:"https://www.osburn-mfg.com/en/products/wood-inserts/1700-wood-insert/",br:OSB,
- man:"https://sbiweb.blob.core.windows.net/media/6998/45981_ia_2023-09-06.pdf",
- spec:"https://sbiweb.blob.core.windows.net/media/5169/ob01705-osburn-1700-i.pdf",
- sur:[{n:"Faceplate",d:"Sizes not published as text — see spec sheet"}]},
+const HEAD_MIN=6;   // headroom above the lintel below which an offset adaptor is likely
 
-{b:"Osburn",n:"MATRIX 1900",h:19,w:25,d:15.5,fb:1.1,btu:45000,hhv:75,em:1.5,burn:7,cr:true,bodyH:23.875,bodyW:25,bodyD:15.25,bodyWRear:23.125,bodyHRear:17,faceW:36,taper:"tapered",
- flag:"Opening width unresolved — page says 25\", manual says 26\". Body measures 25\" at the facing, so 25\" is used here as the permissive case. CONFIRM ON SITE before quoting.",
- page:"https://www.osburn-mfg.com/en/products/wood-inserts/matrix-1900-wood-insert/",br:OSB,
- man:"https://sbiweb.blob.core.windows.net/media/7872/46278_ia_2026-06-26.pdf",
- spec:"https://sbiweb.blob.core.windows.net/media/6661/ob01900_matrix-1900.pdf",
- sur:[{n:"Cuttable faceplate",sw:44,sh:32,cut:true}]},
+// ---------------------------------------------------------------------------
+// DATA LIVES IN models.csv AND surrounds.csv — edit those, not this file.
+// Both are plain tables; open them in Numbers, Excel or any text editor.
+// After editing, bump the fitfinder-vN string in sw.js or phones keep the old copy.
+// ---------------------------------------------------------------------------
+let M=[],NODIM=[];
 
-{b:"Osburn",n:"2000-I",h:23.375,w:28.875,d:15.75,fb:2.4,btu:75000,hhv:72,em:2.3,burn:8,cr:false,bodyH:23.125,bodyW:28.375,bodyD:26.375,rearW:28.375,taper:"straight",
- page:"https://www.osburn-mfg.com/en/products/wood-inserts/2000-wood-insert/",br:OSB,
- man:"https://sbiweb.blob.core.windows.net/media/7111/45927a_2024-02-28.pdf",
- spec:"https://sbiweb.blob.core.windows.net/media/4695/ob02016_osburn-2000-i.pdf",
- sur:[{n:"Faceplate",d:"Sizes not published as text — see spec sheet"}]},
+function parseCSV(text){
+  const rows=[];let row=[],cur="",inQ=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(inQ){
+      if(c==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else inQ=false; }
+      else cur+=c;
+    }else if(c==='"')inQ=true;
+    else if(c===","){row.push(cur);cur="";}
+    else if(c==="\n"){row.push(cur);cur="";rows.push(row);row=[];}
+    else if(c!=="\r")cur+=c;
+  }
+  if(cur!==""||row.length){row.push(cur);rows.push(row);}
+  const head=rows.shift().map(x=>x.trim());
+  return rows.filter(r=>r.some(v=>v.trim()!=="")).map(r=>{
+    const o={};head.forEach((k,i)=>o[k]=(r[i]||"").trim());return o;});
+}
 
-{b:"Osburn",n:"INSPIRE 2000-I",h:24.625,w:29,d:20.75,fb:2.4,btu:75000,hhv:72,em:2.3,burn:8,cr:false,wt:435,bodyH:24.375,bodyW:28.5,bodyD:20.875,rearW:28.5,taper:"straight",
- page:"https://www.osburn-mfg.com/en/products/wood-inserts/inspire-wood-insert/",br:OSB,
- man:"https://sbiweb.blob.core.windows.net/media/7873/45952a_2025-12-02.pdf",
- spec:"https://sbiweb.blob.core.windows.net/media/4659/ob02045_osburn-inspire-2000-i-nord-am%C3%A9ricain.pdf",
- sur:[{n:"Faceplate",d:"Dedicated install guide — sizes not published as text"}]},
+const num=v=>{const x=parseFloat(v);return isFinite(x)?x:undefined;};
 
-{b:"Osburn",n:"MATRIX-I",h:23.375,w:28.875,d:19.625,fb:2.4,btu:75000,hhv:72,em:2.3,burn:8,cr:false,wt:491,bodyH:25.125,bodyW:28.375,bodyD:23.125,faceW:36.125,rearW:28.375,taper:"straight",
- flag:"Opening depth varies with projection kit.",
- page:"https://www.osburn-mfg.com/en/products/wood-inserts/matrix-wood-insert/",br:OSB,
- man:"https://sbiweb.blob.core.windows.net/media/7906/45929a_2026-04-09.pdf",
- spec:"https://sbiweb.blob.core.windows.net/media/4680/ob02028_osburn-matrix-i.pdf",
- sur:[{n:"Backing plate — regular",sw:44,sh:29},{n:"Backing plate — oversize",sw:50,sh:29},{n:'Projection kit 2" or 4"',d:"Brings unit forward — changes required depth"}]},
+function build(rows,surRows){
+  const bySur={};
+  surRows.forEach(s=>{(bySur[s.model]=bySur[s.model]||[]).push({
+    n:s.surround,sw:num(s.width),sh:num(s.height),
+    cut:s.cuttable==="yes",p:num(s.price),d:s.detail||undefined});});
+  const mk=r=>({
+    b:r.brand,n:r.model,market:r.market,
+    w:num(r.min_open_w),h:num(r.min_open_h),d:num(r.min_open_d),dOff:num(r.min_open_d_offset),
+    bodyW:num(r.body_w_facing),bodyWRear:num(r.body_w_rear),rearW:num(r.rear_w_unverified),
+    feetW:num(r.feet_w),feetFromRear:num(r.feet_from_rear),
+    bodyD:num(r.body_d),bodyH:num(r.body_h_facing),bodyHRear:num(r.body_h_rear),
+    bodyHBody:num(r.body_h_no_tabs),collarEdge:num(r.collar_edge_from_facing),
+    taper:r.taper||undefined,faceW:num(r.faceplate_w),
+    glassW:num(r.glass_w),glassH:num(r.glass_h),fb:num(r.firebox_cuft),
+    btu:num(r.btu_tested)||num(r.btu_advertised),
+    btuAdv:num(r.btu_tested)?num(r.btu_advertised):undefined,
+    hhv:num(r.hhv),lhv:num(r.lhv),em:num(r.emissions_g_hr),burn:num(r.burn_hr),
+    cr:r.tax_credit==="yes"?true:r.tax_credit==="no"?false:null,
+    hf:num(r.hearth_front),hs:num(r.hearth_side),wt:num(r.weight_lb),price:num(r.msrp),
+    page:r.product_url||undefined,br:r.brochure_url||undefined,
+    man:r.manual_url||undefined,spec:r.spec_url||undefined,
+    sur:bySur[r.model]||[{n:"Surround options not recorded"}]});
+  M=rows.filter(r=>r.min_open_w).map(r=>{const o=mk(r);o.flag=r.flag||undefined;o.note2=r.note||undefined;return o;});
+  NODIM=rows.filter(r=>!r.min_open_w).map(r=>{const o=mk(r);o.note=r.flag||undefined;o.note2=r.note||undefined;return o;});
+  M.forEach(m=>{if(m.hf===undefined)m.hf=16;if(m.hs===undefined)m.hs=8;});
+}
 
-{b:"Osburn",n:"3500-I",h:26.25,w:31,d:18.375,fb:3.5,btu:110000,hhv:71,em:1.6,burn:10,cr:false,wt:540,bodyH:24.875,bodyW:30.375,bodyD:29,rearW:30.375,taper:"straight",
- page:"https://www.osburn-mfg.com/en/products/wood-inserts/3500-wood-insert/",br:OSB,
- man:"https://sbiweb.blob.core.windows.net/media/7017/46180a_2023-08-25.pdf",
- spec:"https://sbiweb.blob.core.windows.net/media/5672/ob03510-osburn-35-i.pdf",
- sur:[{n:"Faceplate",d:"Sizes not published as text — see spec sheet"}]},
-
-{b:"Osburn",n:"MATRIX 2700",h:27.125,w:31.75,d:22.125,fb:2.5,btu:80000,hhv:64,em:1.2,burn:8,cr:false,bodyH:30.125,bodyW:30.75,bodyD:27.25,faceW:43.625,taper:"tapered",
- page:"https://www.osburn-mfg.com/en/products/wood-inserts/matrix-2700-wood-insert/",br:OSB,
- man:"https://sbiweb.blob.core.windows.net/media/7876/45999a_2025-12-04.pdf",
- spec:"https://sbiweb.blob.core.windows.net/media/5186/ob02700-osburn-matrix-2700-encastrable.pdf",
- sur:[{n:"Cuttable faceplate",d:"Size not published as text — see spec sheet",cut:true},{n:"Projection kit",d:"Changes required depth"}]},
-
-{b:"Regency",n:"Classic I1150",h:19,w:23,d:13.75,dOff:16.5,fb:0.98,btu:55000,hhv:70,lhv:75,em:1.7,burn:8,cr:false,bodyW:22.75,bodyD:19.75,bodyH:20.1875,
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/I1150",br:REG,
- man:"https://assets.regency-fire.com/getattachment/e1d6d18d-6525-4f4c-9196-6267c1f8f6c3/i1150-1-English-Manual.aspx",
- spec:"https://assets.regency-fire.com/getdoc/e5cfd4ff-50ff-46ac-bf36-4250c894a79a/Spec-sheet-I1150",
- sur:[{n:"Standard",sw:38,sh:26.375},{n:"Oversize",sw:44,sh:30.375}]},
-
-{b:"Regency",n:"Cascades I1500",h:19,w:23,d:13.75,dOff:16.5,fb:0.98,btu:55000,hhv:78,lhv:84,em:1.0,burn:10,cr:true,
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/I1500",br:REG,
- man:"https://assets.regency-fire.com/getattachment/13591ea6-09cc-448b-9dad-3a8cb475e00f/I1500-English-Manual.aspx",
- spec:"https://assets.regency-fire.com/getdoc/8b1aad23-16e3-4125-b5a8-2f4d743b86e4/I1500-specsheet",
- sur:[{n:"Standard",sw:38,sh:26.375},{n:"Oversize",sw:44,sh:30.375}]},
-
-{b:"Regency",n:"Hampton HI1150",h:19.625,w:25,d:15,dOff:18.0625,fb:0.98,btu:55000,hhv:70,lhv:75,em:1.7,burn:8,cr:false,
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/HI1150",br:REG,
- man:"https://assets.regency-fire.com/getattachment/810252b7-e315-4858-a012-59116daea87c/Hi1150-1-English-Manual.aspx",
- spec:"https://assets.regency-fire.com/getdoc/9928f383-02a8-47d7-9614-1ebad79ebf6b/Spec-sheet-Hi1150",
- sur:[{n:"Cast faceplate",sw:38.3125,sh:27.25,d:"Metallic black or timberline brown"}]},
-
-{b:"Regency",n:"Classic I2450",h:21.5,w:25,d:17,fb:2.3,btu:75000,hhv:70.3,lhv:76,em:1.6,burn:10,cr:false,
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/I2450",br:REG,
- man:"https://assets.regency-fire.com/getattachment/b31aadbf-c435-4782-97e9-8027f269b0d6/i2450-2-English-Manual.aspx",
- spec:"https://assets.regency-fire.com/getdoc/5393a2be-33a0-4c80-b107-d438510c50c5/Spec-sheet-I2450",
- sur:[{n:"Regular",sw:40,sh:30},{n:"Oversize",sw:48,sh:33}]},
-
-{b:"Regency",n:"Hampton HI2450",h:21.5,w:25,d:17,fb:2.3,btu:75000,hhv:70.3,lhv:76,em:1.6,burn:10,cr:false,
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/HI2450",br:REG,
- man:"https://assets.regency-fire.com/getattachment/8ec674d1-c38c-4271-a95a-7dd19534b515/Hi2450-2-English-Manual.aspx",
- spec:"https://assets.regency-fire.com/getdoc/5dc10b61-bed9-4c88-9b44-50c5f9f4d957/Spec-sheet-Hi2450",
- sur:[{n:"Standard cast",sw:40,sh:30},{n:"Standard cast wide",sw:42.5,sh:30},{n:"Oversize cast",sw:48,sh:34.5625},{n:"Oversize cast wide",sw:51.875,sh:34.5625}]},
-
-{b:"Regency",n:"Cascades I2500",h:21.5,w:25,d:17,fb:2.3,btu:83000,hhv:78.3,lhv:84.7,em:1.4,burn:12,cr:true,
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/I2500",br:REG,
- man:"https://assets.regency-fire.com/getattachment/b1d5036d-1c68-4ac0-b5f6-f0775fd2a48e/I2500M-1-English-Manual.aspx",
- spec:"https://assets.regency-fire.com/getdoc/4f8f723b-5211-4b90-8cc4-7ef94e3b4465/Spec-Sheet-I2500-1",
- sur:[{n:"Standard",sw:40,sh:30},{n:"Oversize",sw:48,sh:33}]},
-
-{b:"Regency",n:"Pro-Series CI2700",h:21.75,w:29,d:19,fb:2.6,btu:27000,btuAdv:78000,hhv:77,lhv:83,em:1.1,burn:14,cr:true,bodyW:28.875,bodyD:21.5,
- flag:"Body is 28⅞\" against a 29\" minimum opening — ⅛\" clearance. Measure twice.",
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/CI2700",br:REG,
- man:"https://assets.regency-fire.com/getattachment/8d2c6fc7-5cf6-4416-bff3-466afb95ad27/CI2700-1-HI500-1.aspx",
- spec:"https://assets.regency-fire.com/getdoc/8e7b2a25-5aea-4b71-96c1-b4d97e52ef55/Spec-Sheet-CI2700-1_HI500-1",
- sur:[{n:"Low-profile faceplate",sw:40,sh:26},{n:"Contemporary faceplate",sw:40,sh:26},{n:"Standard backing plate",sw:44,sh:29.875},{n:"Oversized backing plate",sw:48,sh:30.25}]},
-
-{b:"Regency",n:"Hampton HI500",h:21.75,w:29,d:19,fb:2.6,btu:27000,btuAdv:78000,hhv:77,lhv:83,em:1.1,burn:14,cr:true,bodyW:28.875,bodyD:21.5,
- flag:"Body is 28⅞\" against a 29\" minimum opening — ⅛\" clearance. Measure twice.",
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/HI500",br:REG,
- man:"https://assets.regency-fire.com/getattachment/ae5d549d-e72f-47e0-bd87-47d72597d54a/CI2700-1-HI500-1.aspx",
- spec:"https://assets.regency-fire.com/getdoc/8e7b2a25-5aea-4b71-96c1-b4d97e52ef55/Spec-Sheet-CI2700-1_HI500-1",
- sur:[{n:"Standard cast",sw:39.5,sh:26.5},{n:"Oversize cast",sw:44,sh:31},{n:"Standard backing plate",sw:44,sh:29.875},{n:"Oversized backing plate",sw:48,sh:30.25}]},
-
-{b:"MF Fire",n:"Nova",h:25,w:30,d:16,fb:1.7,btu:50000,em:null,burn:null,cr:null,
- page:"https://mffire.com/product/nova-wood-burning-stove-insert/",br:MFF,
- sur:[{n:"Trim kit",sw:40,sh:29,d:"Only size offered"}]},
-
-{b:"MF Fire",n:"Nova 2",h:28,w:33,d:16,fb:2.4,btu:35000,btuAdv:75000,hhv:75.2,lhv:81,em:1.93,burn:null,cr:true,
- flag:"Not approved for mobile homes. Requires full reline, 6\" liner, chimney 15–33 ft.",
- page:"https://mffire.com/product/nova-wood-burning-stove-insert/",br:MFF,
- man:"https://mffire.com/app/uploads/2022/06/Nova-2-Insert-Owners-Manual-060122.pdf",
- sur:[{n:"Insert trim kit",sw:44,sh:32,d:"Only size offered"}]},
-
-{b:"Rais",n:"Q-Tee II",h:26,w:25,d:15.5,fb:null,btu:20000,em:0.7,burn:null,cr:null,bodyH:25.1,bodyW:24.4,bodyD:14.9,
- flag:"Heating capacity rated at −20 °C. Smallest output of the range.",
- page:"https://us.rais.com/q-tee-ii-insert.html",br:RAI,
- man:"https://us.rais.com/client_media/files/Manuals/New2023Q-Tee%20II%20INSERT%20USA_8296510.pdf",
- sur:[{n:"Surround options not published",d:"Ask Rais dealer"}]}
-];
-
-// Hearth extension required in front of the fuel door (US figures) and to the sides.
-// 16 / 8 is the common case; overrides below come from each manual.
-M.forEach(m=>{
-  if(m.hf===undefined)m.hf=16;
-  if(m.hs===undefined)m.hs=8;
-});
-Object.entries({"MATRIX 2700":[20,8],"Nova":[18,16],"Nova 2":[18,16]}).forEach(([n,v])=>{
-  const m=M.find(x=>x.n===n); if(m){m.hf=v[0];m.hs=v[1];}
-});
-
-const NODIM=[
-{b:"Regency",n:"Alterra Pro i3000",cr:true,btu:85000,hhv:78,em:0.95,price:5049,
- note:"Opening dimensions not published. Premium surrounds reduce required depth to 19½\", traditional to 19\" — so the base requirement is deeper than that.",
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/i3000",br:REG,
- sur:[
-  {n:"Contemporary regular",sw:45.75,sh:31,d:"166-910",p:540},
-  {n:"Contemporary oversize",sw:50.25,sh:33.25,d:"166-911",p:651},
-  {n:"Classic regular",sw:46.125,sh:31,d:"166-912",p:540},
-  {n:"Classic oversize",sw:50.25,sh:33.25,d:"166-913",p:646},
-  {n:"Arched regular",sw:46.125,sh:31,d:"166-914 · 28–31\" H",p:540},
-  {n:"3-sided custom",d:"Made to the opening · 166-937",p:970,cut:true},
-  {n:"Premium surround — black",sw:44.75,sh:30.25,d:'Reduces depth to 19½" · 391-920',p:283},
-  {n:"Premium surround — grey / white / bronze",d:"391-921 / 922 / 923",p:394},
-  {n:"Premium surround — brushed nickel",d:"391-924",p:843},
-  {n:"Traditional surround — black",sw:51.75,sh:33.875,d:'Reduces depth to 19" · 391-927',p:253},
-  {n:"Traditional surround — antique copper",d:"391-928",p:803},
-  {n:"Variable speed blower",d:"166-917",p:404},
-  {n:"Hardwire kit",d:"946-855",p:116}]},
-
-{b:"Regency",n:"Alterra CI1150",cr:false,btu:27353,btuAdv:55000,hhv:71,em:1.3,
- note:"The US site links the Canadian spec sheet, which states this model cannot be sold in the USA. No US dimensions found — ask your Regency rep before quoting.",
- page:"https://www.regency-fire.com/en/Products/Wood/Wood-Inserts/CI1150",br:REG,
- man:"https://assets.regency-fire.com/getattachment/542922d8-4305-4c90-96e8-d9461b89c712/Ci1150-1-English-Manual.aspx",
- sur:[{n:"Standard backing plate",sw:40,sh:37},{n:"Custom backing plate",d:"Cut to minimum dimensions",cut:true}]}
-];
 
 const FR={0.0625:"¹⁄₁₆",0.125:"⅛",0.1875:"³⁄₁₆",0.25:"¼",0.3125:"⁵⁄₁₆",0.375:"⅜",0.4375:"⁷⁄₁₆",0.5:"½",0.5625:"⁹⁄₁₆",0.625:"⅝",0.6875:"¹¹⁄₁₆",0.75:"¾",0.8125:"¹³⁄₁₆",0.875:"⅞",0.9375:"¹⁵⁄₁₆"};
 const f=n=>{const w=Math.floor(n),fr=n-w;
@@ -309,24 +214,27 @@ const maxSur=m=>{const s=m.sur.filter(x=>x.sw&&x.sh);if(!s.length)return null;
 function run(){
   const H=parseFloat(h.value),W=parseFloat(w.value),D=parseFloat(d.value),
         DL=parseFloat(dl.value),LT=parseFloat(lt.value),
-        HE=parseFloat(he.value),RW=parseFloat(rw.value);
-  // A lintel thicker than a single brick course can force the offset flue adaptor,
-  // which in turn increases the depth the insert needs. THRESHOLD UNCONFIRMED.
-  const thickLintel=LT>LINTEL_STD;
-  const useOffset=off.checked||thickLintel;
+        HAL=parseFloat(hal.value),HE=parseFloat(he.value),RW=parseFloat(rw.value);
   if(!(H>0)||!(W>0)||!(D>0)){out.innerHTML='<div class="empty">Enter height, width and depth at floor to see what fits.</div>';return;}
   const fits=[],rev=[],outH=[],outD=[],outW=[];
   M.forEach((m,i)=>{
-    const rd=(useOffset&&m.dOff)?m.dOff:m.d;
+    const rd=m.d;
     const gh=H-m.h,gw=W-m.w,gd=D-rd;
     if(gh<0){outH.push(m.n+" (needs "+f(m.h)+'")');return;}
     if(gd<0){outD.push(m.n+" (needs "+f(rd)+'")');return;}
     if(gw<0){outW.push(m.n+" (needs "+f(m.w)+'")');return;}   // facing width: hard cutoff
     const notes=[];
-    if(thickLintel){
-      notes.push({t:"lintel",s:'Lintel is '+f(LT)+'" thick, deeper than a single '+LINTEL_STD+'" brick course. '+
-        (m.dOff?'Offset adaptor assumed — depth requirement raised to '+f(m.dOff)+'".'
-              :'This model publishes no offset adaptor depth. Confirm the flue can clear the lintel.')});
+    // Offset adaptor is considered only when BOTH hold: the lintel reaches over the
+    // flue collar, AND there is under HEAD_MIN above the lintel. Aaron's rule.
+    if(LT>0){
+      if(!m.collarEdge){
+        notes.push({t:"lintel",s:'Lintel depth '+f(LT)+'", but facing-to-flue-collar is not recorded for this model — read it off the diagram before ruling on an offset adaptor.'});
+      }else if(LT>m.collarEdge){
+        const over=f(LT-m.collarEdge);
+        if(HAL>0&&HAL<HEAD_MIN)notes.push({t:"offset",s:'Lintel reaches '+over+'" past the near edge of the flue collar (collar starts '+f(m.collarEdge)+'" back) and there is only '+f(HAL)+'" above the lintel. <b>Offset adaptor likely required</b> — needs extra depth and extra height.'});
+        else if(HAL>0)notes.push({t:"lintel",s:'Lintel reaches '+over+'" past the flue collar, but '+f(HAL)+'" above the lintel should clear it. Straight adaptor probably fine — confirm on site.'});
+        else notes.push({t:"lintel",s:'Lintel reaches '+over+'" past the near edge of the flue collar. Measure the height above the lintel — under '+HEAD_MIN+'" and an offset adaptor is likely.'});
+      }
     }
     // Sloped back wall: depth at the bottom clears it but depth at the top does not.
     if(DL>0&&DL<rd){
@@ -346,18 +254,26 @@ function run(){
     // Hearth is a flag, never a fail — an extension pad can be added.
     if(HE>0&&HE<m.hf)notes.push({t:"hearth",s:'Hearth is '+f(HE)+'" but this model needs '+f(m.hf)+
       '" in front of the fuel door. Short by '+f(m.hf-HE)+'" — needs a hearth extension.'});
-    const rearRef=m.bodyWRear||m.rearW;
+    // Body and feet are separate problems. The body needs the whole back wall opened up;
+    // the feet are small points and can often be handled with a channel cut.
     if(RW>0){
-      if(rearRef){
-        const g=RW-rearRef;
-        if(g<0&&-g<=BRICK)notes.push({t:"rear",s:'Rear short by '+f(-g)+'" against a '+f(rearRef)+'" body rear'+(m.bodyWRear?"":" (UNVERIFIED)")+'. Within the '+BRICK+'" allowance — sidewall brick removal or reorientation may make it work. Needs inspection.'});
-        else if(g<0)notes.push({t:"rear",s:'Rear short by '+f(-g)+'" against a '+f(rearRef)+'" body rear — beyond the '+BRICK+'" allowance.'});
-      }else notes.push({t:"rear",s:"Rear body width not recorded"+(m.taper?" ("+m.taper+" body)":"")+" — check the spec sheet drawing before committing."});
+      const rb=m.bodyWRear||m.rearW,rf=m.feetW;
+      if(rb&&RW<rb){
+        const g=rb-RW;
+        if(g<=BRICK)notes.push({t:"rear",s:'Rear short by '+f(g)+'" against the '+f(rb)+'" body'+(m.bodyWRear?"":" (UNVERIFIED)")+'. Within the '+BRICK+'" allowance — brick removal or reorientation at the back or sides. Needs inspection.'});
+        else notes.push({t:"rear",s:'Rear short by '+f(g)+'" against the '+f(rb)+'" body — beyond the '+BRICK+'" allowance.'});
+      }else if(rf&&RW<rf){
+        notes.push({t:"feet",s:'Rear clears the '+f(rb||m.bodyW)+'" body but not the '+f(rf)+'" feet, by '+f(rf-RW)+'". Feet are small points — a channel cut for them is often enough.'});
+      }else if(!rb&&!rf){
+        notes.push({t:"rear",s:"Rear body width not recorded"+(m.taper?" ("+m.taper+" body)":"")+" — check the spec sheet drawing before committing."});
+      }
     }
-    const r={m,i,rd,notes,gw};
+    const r={m,i,rd,notes,gw,W,H};
     // Rear-width notes are advisory only. The data is unverified, so it must never
     // demote a model that passes on height, width and depth.
-    if(notes.some(n=>["brick","sur","slope","lintel","hearth"].includes(n.t)))rev.push(r);else fits.push(r);
+    // "lintel" and "rear" are advisory until per-model collar and rear data exist —
+    // a note that fires on every model is noise, not a result.
+    if(notes.some(n=>["brick","sur","slope","hearth","offset"].includes(n.t)))rev.push(r);else fits.push(r);
   });
   fits.sort((a,b)=>(b.m.fb||0)-(a.m.fb||0));
   rev.sort((a,b)=>(b.m.fb||0)-(a.m.fb||0));
@@ -365,7 +281,7 @@ function run(){
   let s="";
   if(!(RW>0))s+='<div class="banner"><b>Rear firebox width not entered.</b> Confirm the back of the firebox clears the insert body before committing to a model.</div>';
   else s+='<div class="banner"><b>Rear width is advisory only.</b> Recorded rear dimensions are unverified and most models have none, so this never rules a model out — it only adds a note to check.</div>';
-  s+='<p class="count">'+fits.length+" of "+M.length+" models fit "+f(H)+'" × '+f(W)+'" × '+f(D)+'" as measured'+(off.checked?", offset adaptor":"")+".</p>";
+  s+='<p class="count">'+fits.length+" of "+M.length+" models fit "+f(H)+'" H × '+f(W)+'" W × '+f(D)+'" deep as measured.</p>';
   if(fits.length){s+='<div class="grp"><p class="ghead"><span class="dot" style="background:var(--ok)"></span>Fits — largest firebox first</p>';fits.forEach(r=>s+=card(r,"fit"));s+="</div>";}
   else s+='<div class="empty">Nothing fits cleanly'+(rev.length?" — see the options needing work below.":".")+'</div>';
   if(rev.length){s+='<div class="grp"><p class="ghead"><span class="dot" style="background:var(--warn-line)"></span>Possible with work</p><p class="gsub">Not ruled out. Each needs your inspection before you promise it.</p>';rev.forEach(r=>s+=card(r,"rev"));s+="</div>";}
@@ -381,12 +297,24 @@ function run(){
   out.innerHTML=s;
 }
 
-function surLine(m){
+// Collapsed card shows only the smallest surround that actually covers the opening.
+// Everything else is in the expanded list.
+function surLine(m,W,H){
   const sized=m.sur.filter(x=>x.sw&&x.sh);
-  let s='<div class="slist"><span class="lbl">Surrounds</span>';
-  if(sized.length)sized.forEach(x=>s+='<span class="s">'+esc(x.n)+" "+f(x.sw)+'" × '+f(x.sh)+'"'+(x.cut?'<span class="cut">cuttable</span>':"")+"</span>");
-  const unsized=m.sur.filter(x=>!(x.sw&&x.sh));
-  unsized.forEach(x=>s+='<span class="s">'+esc(x.n)+(x.cut?'<span class="cut">cuttable</span>':"")+"</span>");
+  let s='<div class="slist"><span class="lbl">Smallest surround that covers</span>';
+  if(sized.length){
+    const fitting=sized.filter(x=>x.sw>=W&&x.sh>=H).sort((a,b)=>(a.sw*a.sh)-(b.sw*b.sh));
+    if(fitting.length){
+      const x=fitting[0];
+      s+='<span class="s">'+esc(x.n)+" "+f(x.sw)+'" W × '+f(x.sh)+'" H'+(x.cut?'<span class="cut">cuttable</span>':"")+"</span>";
+      if(sized.length>1)s+='<span class="s" style="background:none;color:var(--ink3);padding-left:2px">+'+(sized.length-1)+" more</span>";
+    }else{
+      const big=sized.slice().sort((a,b)=>(b.sw*b.sh)-(a.sw*a.sh))[0];
+      s+='<span class="s" style="background:var(--warn-bg);color:var(--warn-ink)">none covers it — largest is '+f(big.sw)+'" × '+f(big.sh)+'"</span>';
+    }
+  }else{
+    m.sur.filter(x=>!(x.sw&&x.sh)).forEach(x=>s+='<span class="s">'+esc(x.n)+(x.cut?'<span class="cut">cuttable</span>':"")+"</span>");
+  }
   return s+"</div>";
 }
 
@@ -394,9 +322,11 @@ function card(r,cls){
   const m=r.m,id=cls+"-"+r.i;
   let s='<div class="card '+cls+'" id="'+id+'"><div class="hd" onclick="document.getElementById(\''+id+'\').classList.toggle(\'open\')">';
   s+='<div class="top"><span class="name">'+esc(m.n)+'</span><span class="brand">'+esc(m.b)+'</span></div>';
-  if(r.rd)s+='<div class="dim"><b>Min. opening at facing</b> — '+f(m.h)+'" H × '+f(m.w)+'" W × '+f(r.rd)+'" D</div>';
+  if(r.rd)s+='<div class="dim"><b>Min. opening at facing</b> — '+f(m.w)+'" W × '+f(m.h)+'" H × '+f(r.rd)+'" D</div>';
   if(m.bodyWRear){
-    s+='<div class="dim"><b>Body</b> — '+f(m.bodyW)+'" W at facing · '+f(m.bodyWRear)+'" W at rear · '+f(m.bodyD)+'" deep · '+f(m.bodyHRear)+'" H at rear</div>';
+    const widestRear=Math.max(m.bodyWRear||0,m.feetW||0);
+    s+='<div class="dim" style="color:var(--ink3)"><b style="color:var(--ink2)">Body</b> — '+f(m.bodyW)+'" W facing · '+f(widestRear)+'" W rear'+
+       (m.feetW&&m.feetW>m.bodyWRear?" (feet)":"")+' · '+f(m.bodyD)+'" D · '+f(m.bodyHRear)+'" H rear</div>';
   }else if(m.bodyD){
     const inclFace=m.bodyW&&m.bodyW>m.w;
     s+='<div class="dim">Stove body — '+(m.bodyW?f(m.bodyW)+'" W × ':"")+f(m.bodyD)+'" D'+(m.bodyH?" × "+f(m.bodyH)+'" H':"")+
@@ -404,7 +334,7 @@ function card(r,cls){
        (m.rearW?' <span class="cut" style="background:var(--warn-bg);color:var(--warn-ink)">rear '+f(m.rearW)+'" unverified</span>':"")+
        (inclFace?' <span class="cut" style="background:var(--warn-bg);color:var(--warn-ink)">incl. faceplate</span>':"")+"</div>";
   }else s+='<div class="dim" style="color:var(--ink3)">Stove body dimensions not published as text</div>';
-  s+=surLine(m);
+  s+=surLine(m,r.W||0,r.H||0);
   s+='<div class="stats">';
   if(m.price)s+='<span class="chip">$'+m.price.toLocaleString()+" body &amp; door</span>";
   if(m.fb)s+='<span class="chip">'+m.fb+" cu ft</span>";
@@ -415,10 +345,22 @@ function card(r,cls){
   if(m.burn)s+='<span class="chip">'+m.burn+" hr burn</span>";
   if(m.cr===true)s+='<span class="chip credit">Tax credit</span>';
   if(m.cr===null)s+='<span class="chip flag">Credit unconfirmed</span>';
+  // Room to work. Body clearance is the real constraint; feet are reported separately
+  // because they are small points and can be channelled if close.
+  if(r.W&&m.bodyW){
+    const body=Math.max(m.bodyW,m.bodyWRear||0);
+    const perBody=(r.W-body)/2;
+    s+='<span class="chip'+(perBody<0.25?" flag":"")+'">'+(perBody<0?"−"+f(-perBody):f(perBody))+'" per side'+(perBody<0.25?" — tight":"")+"</span>";
+    if(m.feetW&&m.feetW>body){
+      const perFeet=(r.W-m.feetW)/2;
+      s+='<span class="chip'+(perFeet<0?" flag":"")+'">feet '+(perFeet<0?"−"+f(-perFeet):f(perFeet))+'"'+(perFeet<0.125?" — channel":"")+"</span>";
+    }
+  }
   s+="</div>";
   (r.notes||[]).forEach(n=>s+='<div class="why">'+esc(n.s)+"</div>");
   if(m.flag)s+='<div class="why">'+esc(m.flag)+"</div>";
   if(m.note)s+='<div class="why">'+esc(m.note)+"</div>";
+  if(m.note2)s+='<div class="note">'+esc(m.note2)+"</div>";
   s+='<div class="more">Tap for full surround list and specs ▾</div></div>';
 
   // Document links live outside the tappable header so they are one tap from the results list.
@@ -432,16 +374,22 @@ function card(r,cls){
   s+='<div class="body"><h4>Surround / faceplate options</h4>';
   m.sur.forEach(x=>{
     const dim=(x.sw&&x.sh)?f(x.sw)+'" W × '+f(x.sh)+'" H':"";
+    void 0;
     const extra=[dim,x.d].filter(Boolean).join(" · ");
     s+='<div class="sur"><span><b>'+esc(x.n)+(x.cut?'<span class="cut">cuttable</span>':"")+"</b>"+(extra?'<span class="sd">'+esc(extra)+"</span>":"")+"</span>";
     s+='<span class="pr">'+(x.p?"$"+x.p.toLocaleString():"—")+"</span></div>";
   });
   if(!m.sur.some(x=>x.p))s+='<div class="pend">Pricing pending — read the 2026 Regency price sheet.</div>';
   s+='<h4>Specification</h4><table>';
-  if(r.rd)s+="<tr><td>Min. opening at facing</td><td>"+f(m.h)+'" × '+f(m.w)+'" × '+f(r.rd)+'"</td></tr>';
+  if(r.rd)s+="<tr><td>Min. opening at facing — W × H × D</td><td>"+f(m.w)+'" × '+f(m.h)+'" × '+f(r.rd)+'"</td></tr>';
   if(m.dOff)s+="<tr><td>Depth — standard / offset adaptor</td><td>"+f(m.d)+'" / '+f(m.dOff)+'"</td></tr>';
-  s+="<tr><td>Insert body W × D</td><td>"+((m.bodyW&&m.bodyD)?f(m.bodyW)+'" × '+f(m.bodyD)+'"':"not recorded — see spec sheet")+"</td></tr>";
-  s+="<tr><td>Rear body width</td><td>"+(m.rearW?f(m.rearW)+'" — <b>unverified</b>, read from drawing':"not recorded")+"</td></tr>";
+  s+="<tr><td>Body at facing — W × H</td><td>"+((m.bodyW&&m.bodyH)?f(m.bodyW)+'" × '+f(m.bodyH)+'"':m.bodyW?f(m.bodyW)+'" W':"not recorded")+"</td></tr>";
+  s+="<tr><td>Body at rear — W × H</td><td>"+((m.bodyWRear&&m.bodyHRear)?f(m.bodyWRear)+'" × '+f(m.bodyHRear)+'"':(m.bodyWRear||m.rearW)?f(m.bodyWRear||m.rearW)+'" W'+(m.bodyWRear?"":" — <b>unverified</b>"):"not recorded")+"</td></tr>";
+  if(m.feetW)s+="<tr><td>Width at feet</td><td>"+f(m.feetW)+'"'+(m.feetFromRear?", about "+f(m.feetFromRear)+'" in from rear':"")+"</td></tr>";
+  if(m.bodyD)s+="<tr><td>Body depth, facing to rear</td><td>"+f(m.bodyD)+'"</td></tr>';
+  if(m.bodyHBody)s+="<tr><td>Body height without collar tabs</td><td>"+f(m.bodyHBody)+'"</td></tr>';
+  if(m.glassW)s+="<tr><td>Viewing glass — W × H</td><td>"+f(m.glassW)+'" × '+f(m.glassH)+'"</td></tr>';
+  s+="<tr><td>Flue collar</td><td>6\" diameter"+(m.collarEdge?", near edge "+f(m.collarEdge)+'" back from facing':"")+"</td></tr>";
   if(m.taper)s+="<tr><td>Body profile</td><td>"+m.taper+"</td></tr>";
   if(m.faceW)s+="<tr><td>Faceplate width</td><td>"+f(m.faceW)+'"</td></tr>';
   if(m.fb)s+="<tr><td>Firebox</td><td>"+m.fb+" cu ft</td></tr>";
@@ -456,9 +404,21 @@ function card(r,cls){
   s+="</table></div></div>";
   return s;
 }
-["h","w","d","dl","lt","he","rw"].forEach(i=>document.getElementById(i).addEventListener("input",run));
-off.addEventListener("change",run);
-run();
+["h","w","d","dl","lt","hal","he","rw"].forEach(i=>document.getElementById(i).addEventListener("input",run));
+
+(async function boot(){
+  try{
+    const [mc,sc]=await Promise.all([
+      fetch("models.csv").then(r=>{if(!r.ok)throw new Error("models.csv "+r.status);return r.text();}),
+      fetch("surrounds.csv").then(r=>{if(!r.ok)throw new Error("surrounds.csv "+r.status);return r.text();})
+    ]);
+    build(parseCSV(mc),parseCSV(sc));
+    run();
+  }catch(e){
+    out.innerHTML='<div class="empty"><b>Could not load the model data.</b><br>'+
+      String(e.message)+'<br><br>models.csv and surrounds.csv must sit beside index.html.</div>';
+  }
+})();
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 </script>
 </body>

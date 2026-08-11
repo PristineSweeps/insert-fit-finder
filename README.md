@@ -2,119 +2,147 @@
 
 Enter a fireplace opening measured at the facing, get the wood inserts that fit.
 
-Live at: `https://YOUR-USERNAME.github.io/insert-fit-finder/`
-(fill in once published)
+Live: `https://pristinesweeps.github.io/insert-fit-finder/`
 
 ---
 
-## Publishing this — click by click
+## Changing the data — no code needed
 
-You have GitHub Desktop, so none of this needs the command line.
+**All the stove data lives in two CSV files.** Open them in Numbers, Excel,
+or any text editor. You never need to touch `index.html` to add a model,
+correct a dimension, or add a surround.
 
-### 1. Make the repository
+| File | What's in it |
+|---|---|
+| `models.csv` | One row per model. 40 columns. |
+| `surrounds.csv` | One row per surround option. Linked to models by name. |
 
-1. Open **GitHub Desktop**
-2. **File → New Repository**
-3. Name: `insert-fit-finder`
-4. Local path: anywhere **outside Dropbox** — `Documents` is fine.
-   Git and Dropbox fight over the hidden `.git` folder and it causes sync
-   errors. Keep them apart.
-5. Leave "Initialize with README" **unticked** — this file is the README
-6. Click **Create Repository**
+### To publish a change
 
-### 2. Add the files
+1. Edit the CSV and save
+2. **Bump the version in `sw.js`** — change `fitfinder-v17` to `v18`
+3. GitHub Desktop: commit, then Push origin
 
-Copy all six files from this folder into the repository folder GitHub
-Desktop just made:
+Step 2 matters. Phones cache hard, and without the bump yours will keep
+showing the old data while you wonder why nothing changed.
 
-```
-index.html      the app
-manifest.json   makes it installable on the phone
-sw.js           offline cache
-icon-180.png    home-screen icon, iPhone
-icon-192.png    home-screen icon, Android
-icon-512.png    high-resolution icon
-README.md       this file
-```
+### models.csv columns
 
-GitHub Desktop will show them as changes.
+Leave any cell blank if you don't have it. Blank means "not recorded" and
+the tool handles it — it never guesses.
 
-### 3. Publish
+**Identity**
+`brand`, `model`, `market` — `model` must match exactly in `surrounds.csv`.
 
-1. Bottom left, type a summary: `Initial version`
-2. Click **Commit to main**
-3. Top right, click **Publish repository**
-4. **Untick "Keep this code private"** — GitHub Pages needs a public repo
-   on the free plan
-5. Click **Publish repository**
+**Manufacturer minimums — these govern every fit decision**
+`min_open_w`, `min_open_h`, `min_open_d`, `min_open_d_offset`
 
-### 4. Turn on Pages
+A row with `min_open_w` blank is treated as "dimensions not published" and
+appears in its own group rather than being silently dropped.
 
-1. In GitHub Desktop: **Repository → View on GitHub**
-2. On the website, click **Settings** (top right of the repo)
-3. Left sidebar, click **Pages**
-4. Under "Build and deployment" → Source, choose **Deploy from a branch**
-5. Branch: **main**, folder: **/ (root)**. Click **Save**
-6. Wait 1–2 minutes. Refresh. The URL appears at the top of that page.
+**Stove body — the wiggle room**
+`body_w_facing`, `body_w_rear`, `feet_w`, `feet_from_rear`,
+`body_d`, `body_h_facing`, `body_h_rear`, `body_h_no_tabs`,
+`collar_edge_from_facing`, `taper`, `faceplate_w`, `glass_w`, `glass_h`
 
-### 5. Put it on the phone
+- `feet_w` — the feet are often the widest point. The tool reports them
+  separately because a channel cut for the feet is a smaller job than
+  opening a back wall.
+- `body_h_no_tabs` — body height ignoring flue collar tabs, where it can be
+  squeezed in.
+- `collar_edge_from_facing` — facing to the *near edge* of the flue collar.
+  Drives the offset adaptor check. Compute it as
+  `body_d − collar_from_rear − 3` for a 6" collar.
+- `rear_w_unverified` — rear widths read off drawings that have not been
+  confirmed. Advisory only; never rules a model out.
 
-1. Open the URL in **Safari** on the iPhone
-2. Tap the **Share** button (square with the arrow)
-3. Scroll down, tap **Add to Home Screen**
-4. Name it `Fit Finder`, tap **Add**
+**Performance**
+`firebox_cuft`, `btu_advertised`, `btu_tested`, `hhv`, `lhv`,
+`emissions_g_hr`, `burn_hr`, `tax_credit` (`yes`/`no`/`unknown`)
 
-It now behaves like an app — full screen, its own icon, and it works with
-no signal once it has loaded a first time.
+Put the EPA-tested figure in `btu_tested`. If both are present the card
+shows the tested one with the advertised struck through.
+
+**Install**
+`hearth_front`, `hearth_side`, `weight_lb`, `msrp`
+
+Hearth defaults to 16" front / 8" side if left blank.
+
+**Links and notes**
+`product_url`, `brochure_url`, `manual_url`, `spec_url`, `flag`, `note`,
+`data_status`
+
+`flag` shows as an amber warning on the card. Use it for anything that
+should stop someone quoting the row blind.
+
+### surrounds.csv columns
+
+`model`, `surround`, `width`, `height`, `cuttable` (`yes`/blank), `price`, `detail`
+
+The card shows only the **smallest surround that covers the opening**;
+the rest are in the expanded view. If none covers it, the model is flagged
+rather than excluded — raising the floor, refacing, or a custom surround
+can still work.
 
 ---
 
-## Changing it later
+## How the fit logic works
 
-Edit `index.html`, then in GitHub Desktop: commit, then **Push origin**.
-Live within a minute or so.
+**The manufacturer's published minimum comes first.** Every decision tests
+against the manual or spec sheet. Body dimensions, the brick allowance,
+feet widths and squeeze heights are *wiggle room* — shown as flags, never
+used to loosen the published minimum.
 
-**Important:** if you change `index.html`, also bump the version in
-`sw.js` — change `fitfinder-v5` to `fitfinder-v6`. Phones cache
-aggressively; without that bump they may keep showing the old version.
+**Height and width at the facing are hard cutoffs.** Nothing can be gained
+at the face.
+
+**The 4" allowance applies to the rear and to depth.** Fireboxes taper
+inward, so the rear is the pinch point and brick can be removed or
+reoriented there.
+
+**Depth is checked twice.** If the top depth clears the insert it's a clean
+fit. If only the bottom clears it, that gap is back-wall slope, not solid
+wall — flagged for a detailed check, since demoing just the slanted portion
+often clears it.
+
+**Offset flue adaptor** is flagged only when the lintel reaches past the
+flue collar *and* there's under 6" above the lintel.
+
+**Manufacturers warn against removing brick or mortar from a masonry
+fireplace.** These flags mark a job for inspection and judgement, not a
+green light.
 
 ---
 
-## What's in the data, and what isn't
+## Known gaps
 
-Every figure came from manufacturer installation manuals and spec sheets,
-**not** product pages. The pages were checked and found to disagree with
-the documents on several models — Regency I1150 reads 1.3 g/hr and 71%
-HHV on the page but 1.7 and 70% on the sheet, and Osburn's 1700-I and
-3500-I pages both overstate the minimum chimney height. Quote the
-document.
-
-**BTU** shows the EPA-tested figure where published, with the advertised
-maximum struck through. They diverge by up to half — Regency CI2700 is
-78,000 advertised against 27,000 tested.
-
-**Known gaps, deliberately visible rather than hidden:**
-
-- **Rear body widths are unverified.** Read off unlabelled dimension
-  drawings, not confirmed against a unit. Treated as a prompt to check,
-  never as a pass.
-- **Regency publishes no plan view**, so no rear width exists for those
-  models in any document.
+- **Rear body widths are unverified** except MATRIX 1900, MATRIX 2700 and
+  INSPIRE 2000-I. Read off unlabelled drawings; treated as advisory.
+- **Regency publishes no plan view**, so no rear width exists in any Regency
+  document. Needs a tape measure or the rep.
 - **Alterra CI1150** — the US site links the Canadian spec sheet, which
-  states the model cannot be sold in the USA. No US dimensions found.
-- **Alterra Pro i3000** — no opening dimensions published. Surround
-  pricing is complete from the 2025 dealer sheet.
-- **Osburn MATRIX 1900** — the page says 25" opening width, the manual
-  reads 26", and the drawing shows a 28¼" body. Unresolved.
-- **Surround pricing** is complete for the i3000 only, pending the 2026
-  Regency price sheet.
+  states the model cannot be sold in the USA.
+- **Alterra Pro i3000** — no opening dimensions published. Surround pricing
+  is complete from the 2025 dealer sheet.
+- **Osburn MATRIX 1900** — page says 25" opening width, manual says 26".
+  The tool uses 26". Body measures 25" at the facing.
+- **Surround pricing** complete for the i3000 only, pending the 2026 Regency
+  price sheet.
 
-**Height and depth are hard fails. Width carries a 4" allowance**
-(one 2" firebrick course off each side wall) and is flagged for
-inspection rather than excluded. Manufacturers explicitly warn against
-removing brick or mortar from a masonry fireplace — those flags mark a
-job for inspection, not a green light.
+Product pages were found to disagree with the manufacturers' own documents
+on several models. Quote the document.
 
-Source of truth for the data: `/Pristine Sweeps/Inserts/insert-specs.csv`
+Source of truth for the wider dataset:
+`/Pristine Sweeps/Inserts/insert-specs.csv`
 
-Compiled 11 August 2026.
+---
+
+## Publishing from scratch
+
+If this ever needs republishing: GitHub Desktop → File → New Repository,
+put it **outside Dropbox**, copy these files in, commit, Publish repository
+with "Keep this code private" **unticked**, then on github.com go to
+Settings → Pages → Deploy from a branch → `main` → `/ (root)` → Save.
+
+On the phone: open the URL in Safari → Share → Add to Home Screen. It then
+works offline once loaded.
