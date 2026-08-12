@@ -29,6 +29,13 @@ h1{font-size:21px;font-weight:600;margin:0 0 3px;}
 .plab{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);margin:0 0 9px;}
 .inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 .inputs.two{grid-template-columns:repeat(2,1fr);}
+.inputs.four{grid-template-columns:repeat(4,1fr);}
+details.opt{padding:0;}
+details.opt summary{list-style:none;cursor:pointer;padding:14px 16px;font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);}
+details.opt summary::-webkit-details-marker{display:none;}
+details.opt summary::after{content:" \25BE";}
+details.opt[open] summary::after{content:" \25B4";}
+details.opt .inputs{padding:0 16px 16px;}
 label.f{display:block;font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.03em;margin-bottom:5px;}
 input[type=number]{width:100%;font:inherit;font-size:22px;font-weight:600;padding:11px 10px;border:1.5px solid #d5d4cc;border-radius:9px;background:#fff;color:var(--ink);text-align:center;}
 input[type=number]:focus{outline:none;border-color:var(--ok);}
@@ -82,7 +89,8 @@ td:last-child{text-align:right;font-variant-numeric:tabular-nums;}
 .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
 .links a{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;border:1px solid #d5d4cc;padding:7px 12px;border-radius:8px;}
 .links.top{margin:0;padding:0 14px 12px;}
-.links.top a{font-size:12.5px;padding:6px 10px;background:var(--soft);border-color:transparent;}
+.links.top{gap:6px;padding:0 14px 10px;}
+.links.top a{font-size:12px;padding:5px 9px;background:var(--soft);border-color:transparent;}
 .links.top a:active{background:#e8e7e0;}
 .pend{font-size:12.5px;color:var(--warn-ink);background:var(--warn-bg);padding:7px 9px;border-radius:7px;margin-top:6px;}
 .empty{background:var(--card);border:1px dashed #c9c8c0;border-radius:12px;padding:22px 16px;text-align:center;color:var(--ink2);font-size:14px;}
@@ -90,6 +98,7 @@ td:last-child{text-align:right;font-variant-numeric:tabular-nums;}
 footer{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink3);}
 footer p{margin:0 0 7px;}
 footer strong{color:var(--ink2);}
+@media(max-width:560px){.inputs.four{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:420px){.inputs{gap:7px}input[type=number]{font-size:19px;padding:10px 4px}}
 </style>
 </head>
@@ -99,27 +108,24 @@ footer strong{color:var(--ink2);}
 <p class="sub">Measure the fireplace opening at the facing material.</p>
 
 <div class="panel">
-  <p class="plab">Opening at facing</p>
-  <div class="inputs">
+  <p class="plab">Fireplace opening</p>
+  <div class="inputs four">
     <div><label class="f" for="h">Height</label><input type="number" id="h" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at facing</span></div>
     <div><label class="f" for="w">Width</label><input type="number" id="w" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at facing</span></div>
-    <div><label class="f" for="d">Depth</label><input type="number" id="d" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at firebox floor</span></div>
+    <div><label class="f" for="d">Depth</label><input type="number" id="d" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at floor</span></div>
+    <div><label class="f" for="dl">Depth top</label><input type="number" id="dl" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at top</span></div>
   </div>
 </div>
 
-<div class="panel">
-  <p class="plab">Optional</p>
-  <div class="inputs">
+<details class="panel opt">
+  <summary>More measurements</summary>
+  <div class="inputs four" style="margin-top:12px">
     <div><label class="f" for="he">Hearth</label><input type="number" id="he" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">out from facing</span></div>
     <div><label class="f" for="rw">Rear width</label><input type="number" id="rw" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">back of firebox</span></div>
     <div><label class="f" for="lt">Lintel</label><input type="number" id="lt" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">thickness</span></div>
-  </div>
-  <div class="inputs" style="margin-top:12px">
-    <div><label class="f" for="dl">Depth top</label><input type="number" id="dl" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at top of opening</span></div>
     <div><label class="f" for="hal">Above lintel</label><input type="number" id="hal" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">headroom</span></div>
-    <div></div>
   </div>
-</div>
+</details>
 
 <div id="out"></div>
 
@@ -208,14 +214,14 @@ function run(){
   const H=parseFloat(h.value),W=parseFloat(w.value),D=parseFloat(d.value),
         DL=parseFloat(dl.value),LT=parseFloat(lt.value),
         HAL=parseFloat(hal.value),HE=parseFloat(he.value),RW=parseFloat(rw.value);
-  if(!(H>0)||!(W>0)||!(D>0)){out.innerHTML='<div class="empty">Enter height, width and depth at floor to see what fits.</div>';return;}
+  if(!(H>0)&&!(W>0)&&!(D>0)){out.innerHTML='<div class="empty">Enter any dimension to start narrowing it down.</div>';return;}
   const fits=[],rev=[],outH=[],outD=[],outW=[];
   M.forEach((m,i)=>{
     const rd=m.d;
     const gh=H-m.h,gw=W-m.w,gd=D-rd;
-    if(gh<0){outH.push(m.n+" (needs "+f(m.h)+'")');return;}
-    if(gd<0){outD.push(m.n+" (needs "+f(rd)+'")');return;}
-    if(gw<0){outW.push(m.n+" (needs "+f(m.w)+'")');return;}   // facing width: hard cutoff
+    if(H>0&&gh<0){outH.push(m.n+" (needs "+f(m.h)+'")');return;}
+    if(D>0&&gd<0){outD.push(m.n+" (needs "+f(rd)+'")');return;}
+    if(W>0&&gw<0){outW.push(m.n+" (needs "+f(m.w)+'")');return;}   // facing width: hard cutoff
     const notes=[];
     // Offset adaptor is considered only when BOTH hold: the lintel reaches over the
     // flue collar, AND there is under HEAD_MIN above the lintel. Aaron's rule.
@@ -274,7 +280,10 @@ function run(){
   let s="";
   if(!(RW>0))s+='<div class="banner"><b>Rear firebox width not entered.</b> Confirm the back of the firebox clears the insert body before committing to a model.</div>';
   else s+='<div class="banner"><b>Rear width is advisory only.</b> Recorded rear dimensions are unverified and most models have none, so this never rules a model out — it only adds a note to check.</div>';
-  s+='<p class="count">'+fits.length+" of "+M.length+" models fit "+f(H)+'" H × '+f(W)+'" W × '+f(D)+'" deep as measured.</p>';
+  const given=[W>0?f(W)+'" W':null,H>0?f(H)+'" H':null,D>0?f(D)+'" deep':null].filter(Boolean).join(" × ");
+  const missing=[W>0?null:"width",H>0?null:"height",D>0?null:"depth"].filter(Boolean);
+  s+='<p class="count">'+fits.length+" of "+M.length+" models fit "+given+
+     (missing.length?' — <span style="color:var(--warn-ink)">'+missing.join(" and ")+" not entered yet</span>":"")+".</p>";
   if(fits.length){s+='<div class="grp"><p class="ghead"><span class="dot" style="background:var(--ok)"></span>Fits — largest firebox first</p>';fits.forEach(r=>s+=card(r,"fit"));s+="</div>";}
   else s+='<div class="empty">Nothing fits cleanly'+(rev.length?" — see the options needing work below.":".")+'</div>';
   if(rev.length){s+='<div class="grp"><p class="ghead"><span class="dot" style="background:var(--warn-line)"></span>Possible with work</p><p class="gsub">Not ruled out. Each needs your inspection before you promise it.</p>';rev.forEach(r=>s+=card(r,"rev"));s+="</div>";}
@@ -354,7 +363,7 @@ function card(r,cls){
   if(m.flag)s+='<div class="why">'+esc(m.flag)+"</div>";
   if(m.note)s+='<div class="why">'+esc(m.note)+"</div>";
   if(m.note2)s+='<div class="note">'+esc(m.note2)+"</div>";
-  s+='<div class="more">Tap for full surround list and specs ▾</div></div>';
+  s+="</div>";
 
   // Document links live outside the tappable header so they are one tap from the results list.
   s+='<div class="links top" onclick="event.stopPropagation()">';
@@ -363,6 +372,7 @@ function card(r,cls){
   if(m.man)s+='<a href="'+m.man+'" target="_blank" rel="noopener">Manual ↗</a>';
   if(m.spec)s+='<a href="'+m.spec+'" target="_blank" rel="noopener">Spec sheet ↗</a>';
   s+="</div>";
+  s+='<div class="more" style="padding:0 14px 12px;margin:0" onclick="document.getElementById(\''+id+'\').classList.toggle(\'open\')">Full surround list and specs ▾</div>';
 
   s+='<div class="body"><h4>Surround / faceplate options</h4>';
   m.sur.forEach(x=>{
