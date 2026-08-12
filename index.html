@@ -89,8 +89,8 @@ td:last-child{text-align:right;font-variant-numeric:tabular-nums;}
 .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
 .links a{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;border:1px solid #d5d4cc;padding:7px 12px;border-radius:8px;}
 .links.top{margin:0;padding:0 14px 12px;}
-.links.top{gap:6px;padding:0 14px 10px;}
-.links.top a{font-size:12px;padding:5px 9px;background:var(--soft);border-color:transparent;}
+.links.top{gap:5px;padding:0 14px 10px;flex-wrap:nowrap;}
+.links.top a{font-size:11.5px;padding:5px 8px;background:var(--soft);border-color:transparent;white-space:nowrap;flex:1 1 auto;text-align:center;}
 .links.top a:active{background:#e8e7e0;}
 .pend{font-size:12.5px;color:var(--warn-ink);background:var(--warn-bg);padding:7px 9px;border-radius:7px;margin-top:6px;}
 .empty{background:var(--card);border:1px dashed #c9c8c0;border-radius:12px;padding:22px 16px;text-align:center;color:var(--ink2);font-size:14px;}
@@ -141,7 +141,7 @@ footer strong{color:var(--ink2);}
   <p><strong>The 4" allowance applies to the rear width and to depth only.</strong> Fireboxes taper inward, so the rear is the pinch point, and removing or reorienting brick at the back or sides can buy room there. A model short on rear width or depth by up to 4" is flagged for inspection rather than excluded.</p>
   <p><strong>Surround coverage.</strong> If the opening is bigger than the largest available surround, the model is flagged, not excluded — raising the firebox floor, refacing, or a custom surround can still make it work.</p>
   <p><strong>Manufacturers warn against removing brick or mortar from a masonry fireplace.</strong> Regency and MF Fire both state it explicitly. These flags mark a job for your inspection and judgement, not a green light.</p>
-  <p><strong>BTU is the EPA-tested figure where published</strong>, advertised struck through. <strong>Tax credit</strong> = US Biomass Rebate, needs HHV ≥ 75%.</p>
+  <p><strong>BTU is the EPA-tested figure where published</strong>, with the advertised maximum struck through.</p>
   <p><strong>Rear widths are unverified.</strong> They were read off unlabelled dimension drawings and have not been confirmed against a unit. Treat them as a prompt to check, never as a pass. Regency publishes no plan view at all, so no rear width exists for those models.</p>
   <p>Surround pricing is complete for the i3000 only until the 2026 Regency price sheet is read. Source of truth: <code>/Pristine Sweeps/Inserts/insert-specs.csv</code>. Compiled 11 August 2026.</p>
 </footer>
@@ -188,14 +188,13 @@ function build(rows,surRows){
     w:num(r.min_open_w),h:num(r.min_open_h),d:num(r.min_open_d),dOff:num(r.min_open_d_offset),
     bodyW:num(r.body_w_facing),bodyWRear:num(r.body_w_rear),rearW:num(r.rear_w_unverified),
     feetW:num(r.feet_w),feetFromRear:num(r.feet_from_rear),
-    bodyD:num(r.body_d),bodyH:num(r.body_h_facing),bodyHRear:num(r.body_h_rear),
+    bodyD:num(r.body_d),bodyDMax:num(r.body_d_max),collarRear:num(r.collar_from_rear),doorMin:num(r.facing_to_door_min),doorMax:num(r.facing_to_door_max),bodyH:num(r.body_h_facing),bodyHRear:num(r.body_h_rear),
     bodyHBody:num(r.body_h_no_tabs),collarEdge:num(r.collar_edge_from_facing),
     taper:r.taper||undefined,faceW:num(r.faceplate_w),
     glassW:num(r.glass_w),glassH:num(r.glass_h),fb:num(r.firebox_cuft),
     btu:num(r.btu_tested)||num(r.btu_advertised),
     btuAdv:num(r.btu_tested)?num(r.btu_advertised):undefined,
     hhv:num(r.hhv),lhv:num(r.lhv),em:num(r.emissions_g_hr),burn:num(r.burn_hr),
-    cr:r.tax_credit==="yes"?true:r.tax_credit==="no"?false:null,
     hf:num(r.hearth_front),hs:num(r.hearth_side),wt:num(r.weight_lb),price:num(r.msrp),
     page:r.product_url||undefined,br:r.brochure_url||undefined,
     man:r.manual_url||undefined,spec:r.spec_url||undefined,
@@ -207,7 +206,7 @@ function build(rows,surRows){
 
 
 const FR={0.0625:"¹⁄₁₆",0.125:"⅛",0.1875:"³⁄₁₆",0.25:"¼",0.3125:"⁵⁄₁₆",0.375:"⅜",0.4375:"⁷⁄₁₆",0.5:"½",0.5625:"⁹⁄₁₆",0.625:"⅝",0.6875:"¹¹⁄₁₆",0.75:"¾",0.8125:"¹³⁄₁₆",0.875:"⅞",0.9375:"¹⁵⁄₁₆"};
-const f=n=>{const w=Math.floor(n),fr=n-w;
+const f=n=>{if(n===undefined||n===null||!isFinite(n))return "—";const w=Math.floor(n),fr=n-w;
   const k=Object.keys(FR).find(k=>Math.abs(fr-parseFloat(k))<0.001);
   return k?(w?w:"")+FR[k]:String(+n.toFixed(2));};
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
@@ -255,6 +254,16 @@ function run(){
         notes.push({t:"sur",s:"Opening exceeds the largest surround ("+f(ms.w)+'" × '+f(ms.h)+'") by '+p.join(" and ")+". Raise the floor, reface, or build custom."});
       }
     }else notes.push({t:"unk",s:"Surround sizes not published — confirm coverage against the spec sheet."});
+    const tightBits=[];
+    if(W>0&&m.bodyW){
+      const widest=Math.max(m.bodyW,m.bodyWRear||0,m.feetW||0);
+      const per=(W-widest)/2;
+      if(per<1)tightBits.push(f(per)+'" per side');
+    }
+    if(H>0&&m.bodyH){const top=H-m.bodyH;if(top<2)tightBits.push(f(top)+'" above the stove');}
+    if(tightBits.length)notes.push({t:"close",s:"<b>Close fit</b> — "+tightBits.join(" and ")+
+      ". Under 1\" at the sides or 2\" on top is tight to work in."});
+
     // Hearth is a flag, never a fail — an extension pad can be added.
     if(HE>0&&HE<m.hf)notes.push({t:"hearth",s:'Hearth is '+f(HE)+'" but this model needs '+f(m.hf)+
       '" in front of the fuel door. Short by '+f(m.hf-HE)+'" — needs a hearth extension.'});
@@ -332,8 +341,12 @@ function card(r,cls){
   if(r.rd)s+='<div class="dim"><b>Min. opening at facing</b> — '+f(m.w)+'" W × '+f(m.h)+'" H × '+f(r.rd)+'" D</div>';
   if(m.bodyWRear){
     const widestRear=Math.max(m.bodyWRear||0,m.feetW||0);
-    s+='<div class="dim" style="color:var(--ink3)"><b style="color:var(--ink2)">Body</b> — '+f(m.bodyW)+'" W facing · '+f(widestRear)+'" W rear'+
-       (m.feetW&&m.feetW>m.bodyWRear?" (feet)":"")+' · '+f(m.bodyD)+'" D · '+f(m.bodyHRear)+'" H rear</div>';
+    const bits=[];
+    if(m.bodyW)bits.push(f(m.bodyW)+'" W facing');
+    if(widestRear)bits.push(f(widestRear)+'" W rear'+(m.feetW&&m.feetW>m.bodyWRear?" (feet)":""));
+    if(m.bodyD)bits.push(f(m.bodyD)+'" D');
+    if(m.bodyHRear)bits.push(f(m.bodyHRear)+'" H rear');
+    s+='<div class="dim" style="color:var(--ink3)"><b style="color:var(--ink2)">Body</b> — '+bits.join(" · ")+"</div>";
   }else if(m.bodyD){
     const inclFace=m.bodyW&&m.bodyW>m.w;
     s+='<div class="dim">Stove body — '+(m.bodyW?f(m.bodyW)+'" W × ':"")+f(m.bodyD)+'" D'+(m.bodyH?" × "+f(m.bodyH)+'" H':"")+
@@ -350,14 +363,12 @@ function card(r,cls){
   if(m.hhv)s+='<span class="chip">'+m.hhv+"% HHV</span>";
   if(m.em)s+='<span class="chip">'+m.em+" g/hr</span>";
   if(m.burn)s+='<span class="chip">'+m.burn+" hr burn</span>";
-  if(m.cr===true)s+='<span class="chip credit">Tax credit</span>';
-  if(m.cr===null)s+='<span class="chip flag">Credit unconfirmed</span>';
   // Room to work. Body clearance is the real constraint; feet are reported separately
   // because they are small points and can be channelled if close.
   if(r.W&&m.bodyW){
     const body=Math.max(m.bodyW,m.bodyWRear||0);
     const perBody=(r.W-body)/2;
-    s+='<span class="chip'+(perBody<0.25?" flag":"")+'">'+(perBody<0?"−"+f(-perBody):f(perBody))+'" per side'+(perBody<0.25?" — tight":"")+"</span>";
+    s+='<span class="chip'+(perBody<1?" flag":"")+'">'+(perBody<0?"−"+f(-perBody):f(perBody))+'" per side'+"</span>";
     if(m.feetW&&m.feetW>body){
       const perFeet=(r.W-m.feetW)/2;
       s+='<span class="chip'+(perFeet<0?" flag":"")+'">feet '+(perFeet<0?"−"+f(-perFeet):f(perFeet))+'"'+(perFeet<0.125?" — channel":"")+"</span>";
@@ -372,10 +383,10 @@ function card(r,cls){
 
   // Document links live outside the tappable header so they are one tap from the results list.
   s+='<div class="links top" onclick="event.stopPropagation()">';
-  if(m.page)s+='<a href="'+m.page+'" target="_blank" rel="noopener">Product page ↗</a>';
+  if(m.page)s+='<a href="'+m.page+'" target="_blank" rel="noopener">Page ↗</a>';
   if(m.br)s+='<a href="'+m.br+'" target="_blank" rel="noopener">Brochure ↗</a>';
   if(m.man)s+='<a href="'+m.man+'" target="_blank" rel="noopener">Manual ↗</a>';
-  if(m.spec)s+='<a href="'+m.spec+'" target="_blank" rel="noopener">Spec sheet ↗</a>';
+  if(m.spec)s+='<a href="'+m.spec+'" target="_blank" rel="noopener">Spec ↗</a>';
   s+="</div>";
   s+='<div class="more" style="padding:0 14px 12px;margin:0" onclick="document.getElementById(\''+id+'\').classList.toggle(\'open\')">Full surround list and specs ▾</div>';
 
@@ -394,7 +405,8 @@ function card(r,cls){
   s+="<tr><td>Body at facing — W × H</td><td>"+((m.bodyW&&m.bodyH)?f(m.bodyW)+'" × '+f(m.bodyH)+'"':m.bodyW?f(m.bodyW)+'" W':"not recorded")+"</td></tr>";
   s+="<tr><td>Body at rear — W × H</td><td>"+((m.bodyWRear&&m.bodyHRear)?f(m.bodyWRear)+'" × '+f(m.bodyHRear)+'"':(m.bodyWRear||m.rearW)?f(m.bodyWRear||m.rearW)+'" W'+(m.bodyWRear?"":" — <b>unverified</b>"):"not recorded")+"</td></tr>";
   if(m.feetW)s+="<tr><td>Width at feet</td><td>"+f(m.feetW)+'"'+(m.feetFromRear?", about "+f(m.feetFromRear)+'" in from rear':"")+"</td></tr>";
-  if(m.bodyD)s+="<tr><td>Body depth, facing to rear</td><td>"+f(m.bodyD)+'"</td></tr>';
+  if(m.bodyD)s+="<tr><td>Body depth, facing to rear</td><td>"+f(m.bodyD)+(m.bodyDMax?'" – '+f(m.bodyDMax):"")+'"</td></tr>';
+  if(m.doorMin)s+="<tr><td>Facing to fuel door</td><td>"+f(m.doorMin)+(m.doorMax?'" – '+f(m.doorMax):"")+'" — add to hearth minimum</td></tr>';
   if(m.bodyHBody)s+="<tr><td>Body height without collar tabs</td><td>"+f(m.bodyHBody)+'"</td></tr>';
   if(m.glassW)s+="<tr><td>Viewing glass — W × H</td><td>"+f(m.glassW)+'" × '+f(m.glassH)+'"</td></tr>';
   s+="<tr><td>Flue collar</td><td>6\" diameter"+(m.collarEdge?", near edge "+f(m.collarEdge)+'" back from facing':"")+"</td></tr>";
@@ -408,7 +420,6 @@ function card(r,cls){
   if(m.burn)s+="<tr><td>Burn time</td><td>up to "+m.burn+" hrs</td></tr>";
   if(m.wt)s+="<tr><td>Shipping weight</td><td>"+m.wt+" lb</td></tr>";
   if(m.hf)s+="<tr><td>Hearth extension — front / side</td><td>"+f(m.hf)+'" / '+f(m.hs)+'"</td></tr>';
-  s+="<tr><td>Biomass tax credit</td><td>"+(m.cr===true?"Eligible":m.cr===false?"Not eligible":"Unconfirmed")+"</td></tr>";
   s+="</table></div></div>";
   return s;
 }
