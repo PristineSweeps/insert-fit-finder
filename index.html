@@ -35,6 +35,7 @@ input[type=number]:focus{outline:none;border-color:var(--ok);}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
 input[type=number]{-moz-appearance:textfield;}
 .hint{font-size:12px;color:var(--ink3);margin-top:10px;}
+.cap{display:block;font-size:10.5px;color:var(--ink3);text-align:center;margin-top:4px;line-height:1.25;}
 .opts{margin-top:12px;display:flex;align-items:flex-start;gap:8px;font-size:14px;color:var(--ink2);}
 .opts input{margin-top:3px;flex-shrink:0;}
 .half{max-width:220px;}
@@ -99,33 +100,25 @@ footer strong{color:var(--ink2);}
 
 <div class="panel">
   <p class="plab">Opening at facing</p>
-  <div class="inputs two">
-    <div><label class="f" for="h">Height</label><input type="number" id="h" inputmode="decimal" step="0.125" placeholder="—"></div>
-    <div><label class="f" for="w">Width</label><input type="number" id="w" inputmode="decimal" step="0.125" placeholder="—"></div>
+  <div class="inputs">
+    <div><label class="f" for="h">Height</label><input type="number" id="h" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at facing</span></div>
+    <div><label class="f" for="w">Width</label><input type="number" id="w" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at facing</span></div>
+    <div><label class="f" for="d">Depth</label><input type="number" id="d" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at firebox floor</span></div>
   </div>
-  <p class="plab" style="margin-top:14px">Firebox depth at bottom</p>
-  <div class="half"><input type="number" id="d" inputmode="decimal" step="0.125" placeholder="—"></div>
-  <p class="hint">Facing to back wall at the firebox floor.</p>
 </div>
 
 <div class="panel">
-  <p class="plab">Optional — refines the result</p>
-  <div class="inputs two" style="margin-top:4px">
-    <div><label class="f" for="dl">Depth at top</label><input type="number" id="dl" inputmode="decimal" step="0.125" placeholder="—"></div>
-    <div><label class="f" for="lt">Lintel depth</label><input type="number" id="lt" inputmode="decimal" step="0.125" placeholder="—"></div>
+  <p class="plab">Optional</p>
+  <div class="inputs">
+    <div><label class="f" for="he">Hearth</label><input type="number" id="he" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">out from facing</span></div>
+    <div><label class="f" for="rw">Rear width</label><input type="number" id="rw" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">back of firebox</span></div>
+    <div><label class="f" for="lt">Lintel</label><input type="number" id="lt" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">thickness</span></div>
   </div>
-  <div class="inputs two" style="margin-top:10px">
-    <div><label class="f" for="hal">Height above lintel</label><input type="number" id="hal" inputmode="decimal" step="0.125" placeholder="—"></div>
-    <div><label class="f" for="he">Hearth</label><input type="number" id="he" inputmode="decimal" step="0.125" placeholder="—"></div>
-  </div>
-  <div class="inputs two" style="margin-top:10px">
-    <div><label class="f" for="rw">Rear width</label><input type="number" id="rw" inputmode="decimal" step="0.125" placeholder="—"></div>
+  <div class="inputs" style="margin-top:12px">
+    <div><label class="f" for="dl">Depth top</label><input type="number" id="dl" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">at top of opening</span></div>
+    <div><label class="f" for="hal">Above lintel</label><input type="number" id="hal" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">headroom</span></div>
     <div></div>
   </div>
-  <p class="hint"><b>Depth at top</b> — facing to back wall at the top of the opening. The gap against the bottom is back-wall slope.<br>
-  <b>Lintel depth</b> and <b>height above lintel</b> — together decide the offset flue adaptor. An offset is only considered when the lintel reaches over the flue collar <em>and</em> there is under 6" above it.<br>
-  <b>Hearth</b> — non-combustible hearth out from the facing.<br>
-  <b>Rear width</b> — fireboxes taper; the insert body still has to pass.</p>
 </div>
 
 <div id="out"></div>
