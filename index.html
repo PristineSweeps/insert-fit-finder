@@ -123,8 +123,12 @@ footer strong{color:var(--ink2);}
     <div><label class="f" for="he">Hearth</label><input type="number" id="he" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">out from facing</span></div>
     <div><label class="f" for="rw">Rear width</label><input type="number" id="rw" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">back of firebox</span></div>
     <div><label class="f" for="lt">Lintel</label><input type="number" id="lt" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">thickness</span></div>
-    <div><label class="f" for="hal">Above lintel</label><input type="number" id="hal" inputmode="decimal" step="0.125" placeholder="—"><span class="cap">headroom</span></div>
   </div>
+  <p class="hint" style="padding:0 16px 16px;margin:0">
+  <b>Depth top</b> — facing to back wall at the top of the opening. The gap against the floor depth is back-wall slope, which is often demolishable.<br>
+  <b>Hearth</b> — non-combustible hearth out from the facing. Most models need 16".<br>
+  <b>Rear width</b> — the back of the firebox. Feet are usually the widest part of the stove and are reported separately.<br>
+  <b>Lintel</b> — thickness front to back. An offset adaptor is flagged only when the lintel reaches past the flue collar <em>and</em> under 6" clears above the stove.</p>
 </details>
 
 <div id="out"></div>
@@ -213,7 +217,7 @@ const maxSur=m=>{const s=m.sur.filter(x=>x.sw&&x.sh);if(!s.length)return null;
 function run(){
   const H=parseFloat(h.value),W=parseFloat(w.value),D=parseFloat(d.value),
         DL=parseFloat(dl.value),LT=parseFloat(lt.value),
-        HAL=parseFloat(hal.value),HE=parseFloat(he.value),RW=parseFloat(rw.value);
+        HE=parseFloat(he.value),RW=parseFloat(rw.value);
   if(!(H>0)&&!(W>0)&&!(D>0)){out.innerHTML='<div class="empty">Enter any dimension to start narrowing it down.</div>';return;}
   const fits=[],rev=[],outH=[],outD=[],outW=[];
   M.forEach((m,i)=>{
@@ -227,12 +231,13 @@ function run(){
     // flue collar, AND there is under HEAD_MIN above the lintel. Aaron's rule.
     if(LT>0){
       if(!m.collarEdge){
-        notes.push({t:"lintel",s:'Lintel depth '+f(LT)+'", but facing-to-flue-collar is not recorded for this model — read it off the diagram before ruling on an offset adaptor.'});
+        notes.push({t:"lintel",s:'Lintel '+f(LT)+'" — facing-to-flue-collar not recorded for this model. Read it off the diagram before ruling on an offset adaptor.'});
       }else if(LT>m.collarEdge){
         const over=f(LT-m.collarEdge);
-        if(HAL>0&&HAL<HEAD_MIN)notes.push({t:"offset",s:'Lintel reaches '+over+'" past the near edge of the flue collar (collar starts '+f(m.collarEdge)+'" back) and there is only '+f(HAL)+'" above the lintel. <b>Offset adaptor likely required</b> — needs extra depth and extra height.'});
-        else if(HAL>0)notes.push({t:"lintel",s:'Lintel reaches '+over+'" past the flue collar, but '+f(HAL)+'" above the lintel should clear it. Straight adaptor probably fine — confirm on site.'});
-        else notes.push({t:"lintel",s:'Lintel reaches '+over+'" past the near edge of the flue collar. Measure the height above the lintel — under '+HEAD_MIN+'" and an offset adaptor is likely.'});
+        const head=(H>0&&m.bodyH)?H-m.bodyH:null;
+        if(head===null)notes.push({t:"lintel",s:'Lintel reaches '+over+'" past the flue collar (collar starts '+f(m.collarEdge)+'" back). Enter the opening height to check clearance above the stove.'});
+        else if(head<HEAD_MIN)notes.push({t:"offset",s:'Lintel reaches '+over+'" past the flue collar, and only '+f(head)+'" clears above the stove body. <b>Offset adaptor likely required</b> — needs extra depth and extra height.'});
+        else notes.push({t:"lintel",s:'Lintel reaches '+over+'" past the flue collar, but '+f(head)+'" clears above the stove body. Straight adaptor probably fine — confirm on site.'});
       }
     }
     // Sloped back wall: depth at the bottom clears it but depth at the top does not.
@@ -407,7 +412,7 @@ function card(r,cls){
   s+="</table></div></div>";
   return s;
 }
-["h","w","d","dl","lt","hal","he","rw"].forEach(i=>document.getElementById(i).addEventListener("input",run));
+["h","w","d","dl","lt","he","rw"].forEach(i=>document.getElementById(i).addEventListener("input",run));
 
 (async function boot(){
   try{
